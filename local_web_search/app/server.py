@@ -72,20 +72,24 @@ class SearchServer:
             f"Step 2: Reranking using hierarchical similarity search, {len(hierarchical_url_results)} results returned"
         )
 
-        pagerank_reranked_results = timed_fn(self.client.pagerank_reranking)(
-            hierarchical_url_results
-        )[:limit_final_pagerank_results]
-
-        logger.debug(
-            "Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
-        )
-
-        # Print or process the sorted results
-        for serp_result in pagerank_reranked_results:
+        try:
+            pagerank_reranked_results = timed_fn(
+                self.client.pagerank_reranking
+            )(hierarchical_url_results)[:limit_final_pagerank_results]
             logger.debug(
-                f"URL: {serp_result.url}, Similarity: {serp_result.score:.4f}:\nTitle: {serp_result.title}\nText:\n{serp_result.text}"
+                "Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
             )
-            logger.debug("-" * 100)
+
+            # Print or process the sorted results
+            for serp_result in pagerank_reranked_results:
+                logger.debug(
+                    f"URL: {serp_result.url}, Similarity: {serp_result.score:.4f}:\nTitle: {serp_result.title}\nText:\n{serp_result.text}"
+                )
+                logger.debug("-" * 100)
+        except Exception as e:
+            logger.error(
+                f"An error occurred while reranking using pagerank: {e}"
+            )
 
         return pagerank_reranked_results
 
@@ -123,4 +127,4 @@ def run_search(query: SearchQuery):
 if __name__ == "__main__":
     config = load_config()["server"]
     logging.basicConfig(level=config["log_level"])
-    uvicorn.run(app, host=config["host"], port=config["port"])
+    uvicorn.run(app, host=config["host"], port=int(config["port"]))

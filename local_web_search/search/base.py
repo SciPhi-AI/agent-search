@@ -22,28 +22,25 @@ class OpenWebSearch:
         self,
     ):
         # Load the configuration
-        config = load_config()["open_web_search"]
+        self.config = load_config()["open_web_search"]
         logger.info(
-            f"Connecting to collection: {config['qdrant_collection_name']}"
+            f"Connecting to collection: {self.config['qdrant_collection_name']}"
         )
-        self.collection_name = config["qdrant_collection_name"]
+        self.collection_name = self.config["qdrant_collection_name"]
         self.client = QdrantClient(
-            config["qdrant_client_host"],
-            grpc_port=config["qdrant_client_grpc_port"],
+            self.config["qdrant_client_host"],
+            grpc_port=self.config["qdrant_client_grpc_port"],
             prefer_grpc=True,
         )
 
         self.embedding_model = AutoModel.from_pretrained(
-            config["embedding_model_name"], trust_remote_code=True
+            self.config["embedding_model_name"], trust_remote_code=True
         )
 
-        self.conn = sqlite3.connect(config["sqlite_db_rel_path"])
-        self.cur = self.conn.cursor()
-        self.sqlite_table_name = config["sqlite_table_name"]
+        self.sqlite_table_name = self.config["sqlite_table_name"]
 
-        self.cur = self.conn.cursor()
-        self.postgres_table_name = config["postgres_table_name"]
-        self.pagerank_rerank_module = config["pagerank_rerank_module"]
+        self.pagerank_rerank_module = self.config["pagerank_rerank_module"]
+        pagerank_file_path = self.config["pagerank_file_path"]
 
         if self.pagerank_rerank_module:
             if not pagerank_file_path:
@@ -58,7 +55,9 @@ class OpenWebSearch:
                 zip(df["Domain"], df["Open Page Rank"])
             )
             self.pagerank_rerank_module = True
-            self.pagerank_importance = config["pagerank_importance"]
+            self.pagerank_importance = float(
+                self.config["pagerank_importance"]
+            )
 
     def get_query_vector(self, query: str):
         """Gets the query vector for the given query"""
@@ -98,19 +97,34 @@ class OpenWebSearch:
     ) -> List[SERPResult]:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
 
+        conn = sqlite3.connect(self.config["sqlite_db_rel_path"])
+        cur = conn.cursor()
+
         # SQL query to fetch the entries for the URLs
-        query = f"SELECT * FROM {self.postgres_table_name} WHERE url IN %s"
+        # Assuming 'urls' is a list of URL strings
+        placeholders = ", ".join("?" * len(urls))
+        query = f"SELECT * FROM {self.sqlite_table_name} WHERE url IN ({placeholders})"
 
         # Fetch all results
-        self.cur.execute(query, (tuple(urls),))
-        results = self.cur.fetchall()
+        cur.execute(query, tuple(urls))
+        results = cur.fetchall()
 
         # List to store the results along with their similarity scores
         similarity_results = []
 
         # Iterate over each result to find the most similar text chunk
         for result in results:
-            _, url, title, metadata, dataset, text_chunks, embeddings = result
+            (
+                _,
+                url,
+                title,
+                metadata,
+                dataset,
+                text_chunks_str,
+                embeddings_str,
+            ) = result
+            text_chunks = json.loads(text_chunks_str)
+            embeddings = json.loads(embeddings_str)
             max_similarity = -1
             most_similar_chunk = None
 
@@ -134,8 +148,10 @@ class OpenWebSearch:
                     text=most_similar_chunk,
                 ),
             )
+
         # Sort the results based on similarity score in descending order
         similarity_results.sort(key=lambda x: x.score, reverse=True)
+        conn.close()
         return similarity_results[:limit]
 
     def pagerank_reranking(
