@@ -6,8 +6,8 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from local_web_search.core.utils import load_config, select_top_urls
-from local_web_search.search import OpenWebSearch
+from local_search.core.utils import load_config, select_top_urls
+from local_search.search import OpenWebSearch
 
 logger = logging.getLogger(__name__)
 

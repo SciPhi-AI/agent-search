@@ -9,8 +9,8 @@ import pandas as pd
 from qdrant_client import QdrantClient
 from transformers import AutoModel
 
-from local_web_search.core import SERPResult
-from local_web_search.core.utils import cosine_similarity, load_config
+from local_search.core import SERPResult
+from local_search.core.utils import cosine_similarity, load_config
 
 logger = logging.getLogger(__name__)
 
