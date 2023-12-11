@@ -1,16 +1,16 @@
 import json
 import logging
 import os
-from typing import List, Optional
+import sqlite3
+from typing import List
 
 import numpy as np
 import pandas as pd
-import psycopg2
 from qdrant_client import QdrantClient
 from transformers import AutoModel
 
 from local_web_search.core import SERPResult
-from local_web_search.core.utils import cosine_similarity
+from local_web_search.core.utils import cosine_similarity, load_config
 
 logger = logging.getLogger(__name__)
 
@@ -18,47 +18,34 @@ logger = logging.getLogger(__name__)
 class OpenWebSearch:
     """A simple search client for the OpenSearch collection"""
 
-    # TODO - Move to a config file
     def __init__(
         self,
-        qdrant_collection_name: str = "SciPhi_Expanse",
-        qdrant_client_host: str = "localhost",
-        qdrant_client_grpc_port: int = 6334,
-        embedding_model_name: str = "jinaai/jina-embeddings-v2-base-en",
-        postgres_dbname: str = "root",
-        postgres_user: str = "admin",
-        postgres_password: str = "password",
-        postgres_host: str = "localhost",
-        postgres_table_name: str = "expanse_processed",
-        pagerank_rerank_module: bool = True,
-        pagerank_importance: float = 0.1,
-        pagerank_file_path: Optional[str] = None,
     ):
-        logger.info(f"Connecting to collection: {qdrant_collection_name}")
-        self.collection_name = qdrant_collection_name
+        # Load the configuration
+        config = load_config()["open_web_search"]
+        logger.info(
+            f"Connecting to collection: {config['qdrant_collection_name']}"
+        )
+        self.collection_name = config["qdrant_collection_name"]
         self.client = QdrantClient(
-            qdrant_client_host,
-            grpc_port=qdrant_client_grpc_port,
+            config["qdrant_client_host"],
+            grpc_port=config["qdrant_client_grpc_port"],
             prefer_grpc=True,
         )
 
         self.embedding_model = AutoModel.from_pretrained(
-            embedding_model_name, trust_remote_code=True
+            config["embedding_model_name"], trust_remote_code=True
         )
-        # Connect to the database
-        self.conn = psycopg2.connect(
-            dbname=postgres_dbname,
-            user=postgres_user,
-            password=postgres_password,
-            host=postgres_host,
-            options="-c client_encoding=UTF8",
-        )
+
+        self.conn = sqlite3.connect(config["sqlite_db_rel_path"])
+        self.cur = self.conn.cursor()
+        self.sqlite_table_name = config["sqlite_table_name"]
 
         self.cur = self.conn.cursor()
-        self.postgres_table_name = postgres_table_name
-        self.pagerank_rerank_module = pagerank_rerank_module
+        self.postgres_table_name = config["postgres_table_name"]
+        self.pagerank_rerank_module = config["pagerank_rerank_module"]
 
-        if pagerank_rerank_module:
+        if self.pagerank_rerank_module:
             if not pagerank_file_path:
                 # Simulating reading from a CSV file
                 pagerank_file_path = os.path.join(
@@ -71,7 +58,7 @@ class OpenWebSearch:
                 zip(df["Domain"], df["Open Page Rank"])
             )
             self.pagerank_rerank_module = True
-            self.pagerank_importance = pagerank_importance
+            self.pagerank_importance = config["pagerank_importance"]
 
     def get_query_vector(self, query: str):
         """Gets the query vector for the given query"""

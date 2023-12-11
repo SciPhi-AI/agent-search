@@ -6,7 +6,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from local_web_search.core.utils import select_top_urls
+from local_web_search.core.utils import load_config, select_top_urls
 from local_web_search.search import OpenWebSearch
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ def timed_fn(fn):
     return wrapper
 
 
-class SearchRunner:
+class SearchServer:
     def __init__(self):
         self.client = OpenWebSearch()
 
@@ -101,7 +101,7 @@ class SearchQuery(BaseModel):
 
 
 app = FastAPI()
-search_runner = SearchRunner()
+search_runner = SearchServer()
 
 
 @app.post("/search")
@@ -121,5 +121,6 @@ def run_search(query: SearchQuery):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    config = load_config()["server"]
+    logging.basicConfig(level=config["log_level"])
+    uvicorn.run(app, host=config["host"], port=config["port"])

@@ -15,13 +15,14 @@ readme = "README.md"
 python = ">=3.9,<3.12"
 
 # package dependencies
+configparser = "^5.0.0"
 fire = "^0.5.0"
 numpy = "^1.25.2"
 pandas = "^2.1.2"
-psycopg2 = "^2.9.9"
 pydantic = "^1.10.13"
 qdrant_client = "^1.7.0"
 requests = "^2.31.0"
+pysqlite3 = "0.5.2"
 transformers = "^4.33.1"
 
 [tool.poetry.group.dev.dependencies]

@@ -1,3 +1,5 @@
+import configparser
+import os
 from typing import List, Optional
 
 import numpy as np
@@ -39,3 +41,11 @@ def cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
     norm_v1 = np.linalg.norm(v1)
     norm_v2 = np.linalg.norm(v2)
     return dot_product / (norm_v1 * norm_v2)
+
+
+def load_config() -> configparser.ConfigParser:
+    # file_path = os.path.join(os.path.dirname(__file__), "..", "config.ini")
+    config = configparser.ConfigParser()
+    # config.read(file_path)
+    config.read("config.ini")
+    return config
