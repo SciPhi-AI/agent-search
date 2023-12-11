@@ -1,4 +1,4 @@
-# LocalSearch [ΨΦ]: A local knowledge engine for your LLM
+# LocalSearch [ΨΦ]: An open source framework and dataset for webscale local search
 
 ## Quickstart Guide for LocalSearch
 
