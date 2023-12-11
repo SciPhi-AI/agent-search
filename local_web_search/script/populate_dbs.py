@@ -156,13 +156,20 @@ class Populate:
         # Close the database connection
         conn.close()
 
-    def populate_qdrant(self, batch_size=1_000) -> None:
+    def populate_qdrant(self, batch_size=100) -> None:
         """Populate the database with the given dataset and subset"""
 
         output_queue = queue.Queue()
+
+        qdrant_client = QdrantClient(
+            self.config["qdrant_client_host"],
+            grpc_port=self.config["qdrant_client_grpc_port"],
+            prefer_grpc=True,
+        )
+
         writer_thread = threading.Thread(
             target=writer,
-            args=(output_queue,),
+            args=(output_queue, self.config, qdrant_client),
         )
         writer_thread.start()
 
@@ -170,11 +177,6 @@ class Populate:
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
 
-        qdrant_client = QdrantClient(
-            self.config["qdrant_client_host"],
-            grpc_port=self.config["qdrant_client_grpc_port"],
-            prefer_grpc=True,
-        )
         try:
             create_qdrant_collection(qdrant_client, self.config)
         except Exception as e:
@@ -185,8 +187,11 @@ class Populate:
         select_query = f"SELECT * FROM {sqlite_table_name}"
         cur.execute(select_query)
 
+        logger.info("Populating the Qdrant Collection...")
         while True:
+            logger.info("Fetching rows from the SQLite database...")
             rows = cur.fetchmany(batch_size)
+
             if not rows:
                 break
 
@@ -205,7 +210,7 @@ class Populate:
                 ) = row
                 text_chunks_list = json.loads(text_chunks)
                 embeddings_list = json.loads(embeddings)
-                points.append(
+                points.extend(
                     [
                         PointStruct(
                             id=str(uuid.uuid3(uuid.NAMESPACE_DNS, url)),
@@ -218,10 +223,9 @@ class Populate:
 
             output_queue.put(points)
 
-            # Process and insert the data into Qdrant
-            # (Add your logic here for processing and inserting into Qdrant)
-
             logger.info(f"Processed batch of {len(rows)} entries")
+
+        output_queue.put(points)
 
         # Close the database connection
         conn.close()

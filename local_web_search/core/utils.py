@@ -1,5 +1,4 @@
 import configparser
-import os
 from typing import List, Optional
 
 import numpy as np
