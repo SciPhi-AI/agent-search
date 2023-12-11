@@ -14,13 +14,15 @@ class QueryWrapper:
     def __init__(self):
         pass
 
-    def query(self, api_base="http://0.0.0.0:8000"):
+    def query(
+        self, query="What is a lagrangian?", api_base="http://0.0.0.0:8000"
+    ):
         """Run a query on the SERPClient"""
         client = SERPClient(api_base)
         logging.basicConfig(level=logging.INFO)
 
         try:
-            results = client.search("What is a lagrangian?")
+            results = client.search(query)
             for result in results:
                 logging.info(
                     f"URL: {result.url}, Score: {result.score}, Title: {result.title}"

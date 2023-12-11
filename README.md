@@ -1,4 +1,4 @@
-# LocalSearch [ΨΦ]: An open source framework and dataset for webscale local search
+# LocalSearch [ΨΦ]: An open source framework and dataset for webscale search
 
 ## Quickstart Guide for LocalSearch
 
@@ -13,7 +13,7 @@ Ensure you have Docker installed on your machine. If not, you can download and i
 - To execute a query and see the LocalSearch in action, use the following command:
   
   ```shell
-  python script/run_query.py query
+  python local_search/script/run_query.py query --query="What is Fermat's last theorem?"
   ```
 
   Please register with [SciPhi](https://www.sciphi.ai/) for a free API key for remote access to the entire database.
@@ -24,7 +24,7 @@ Ensure you have Docker installed on your machine. If not, you can download and i
    - Run the following command to populate the SQLite database:
 
      ```shell
-     python script/populate_dbs.py populate_sqlite
+     python local_search/script/populate_dbs.py populate_sqlite
      ```
 
      This will create a SQLite database named `open_web_search.db` in the `data` directory. It would be rather slow to stream the entire 1tb of data into the database, so the database can be installed directly from [insert link].
@@ -44,7 +44,7 @@ Ensure you have Docker installed on your machine. If not, you can download and i
    - Start the LocalSearch server by executing:
 
      ```shell
-     python app/server.py
+     python local_search/app/server.py
      ```
 
 ### Notes
