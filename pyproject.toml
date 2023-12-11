@@ -1,0 +1,45 @@
+[build-system]
+requires = ["poetry-core", "setuptools", "wheel"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "local_web_search"
+version = "0.1.7"
+description = "LocalWebSearch: An open source framework and embeddings dataset for local webscale search."
+authors = ["Owen Colegrove <owen@sciphi.ai>"]
+license = "Apache-2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+# python version
+python = ">=3.9,<3.12"
+
+# package dependencies
+fire = "^0.5.0"
+numpy = "^1.25.2"
+pandas = "^2.1.2"
+psycopg2 = "^2.9.9"
+pydantic = "^1.10.13"
+qdrant_client = "^1.7.0"
+requests = "^2.31.0"
+transformers = "^4.33.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+flake8 = "6.1.0"
+isort = "5.12.0"
+pre-commit = "^3.3.3"
+mypy = "^1.5.1"
+types-requests = "^2.31.0.2"
+types-attrs = "^19.1.0"
+
+[tool.black]
+line-length = 79
+
+[tool.mypy]
+ignore_missing_imports = true
+exclude = 'playground/.*|deprecated/.*|dump/.*|docs/source'
+
+[[tool.mypy.overrides]]
+module = "yaml"
+ignore_missing_imports = true

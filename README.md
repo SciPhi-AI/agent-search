@@ -1,1 +1,1 @@
-# SciPhi [ΨΦ]: AI's Knowledge Engine 💡# local-web-search
+# LocalWebSearch [ΨΦ]: A local search engine for the web.
