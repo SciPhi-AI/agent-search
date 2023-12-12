@@ -1,4 +1,5 @@
-from typing import List
+import os
+from typing import List, Optional
 
 import requests
 
@@ -28,8 +29,18 @@ class SERPResult:
 
 
 class SERPClient:
-    def __init__(self, api_base: str):
-        self.api_base = api_base
+    def __init__(
+        self, api_base: Optional[str] = None, auth_token: Optional[str] = None
+    ):
+        self.api_base = (
+            api_base or os.getenv("SCIPHI_API_BASE") or "https://api.sciphi.ai"
+        )
+        self.auth_token = auth_token or os.getenv("SCIPHI_API_KEY")
+
+        if not self.auth_token:
+            raise ValueError(
+                "No authorization token provided and SCIPHI_API_KEY environment variable is not set."
+            )
 
     def search(
         self,
@@ -38,14 +49,20 @@ class SERPClient:
         num_step1_results: int = 25,
         num_step2_results: int = 10,
     ) -> List[SERPResult]:
+        headers = {
+            "Authorization": f"Bearer {self.auth_token}",
+            "Content-Type": "application/json",
+        }
         payload = {
             "query": query,
             "num_step0_results": num_step0_results,
             "num_step1_results": num_step1_results,
             "num_step2_results": num_step2_results,
         }
-        response = requests.post(f"{self.api_base}/search", json=payload)
+        response = requests.post(
+            f"{self.api_base}/search", headers=headers, json=payload
+        )
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
 
-        results = response.json().get("results", [])
+        results = response.json()
         return [SERPResult.from_dict(result) for result in results]

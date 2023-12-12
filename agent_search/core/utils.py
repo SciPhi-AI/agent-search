@@ -2,7 +2,6 @@ import configparser
 from typing import List, Optional
 
 import numpy as np
-
 from local_web_search.core import SERPResult
 
 

@@ -1,6 +1,6 @@
-import fire
 import logging
 
+import fire
 import requests
 
 from agent_search.core import SERPClient
@@ -15,7 +15,9 @@ class QueryWrapper:
         pass
 
     def query(
-        self, query="What is a lagrangian?", api_base="http://0.0.0.0:8000"
+        self,
+        query="What is a lagrangian?",
+        api_base="https://api.sciphi.ai",
     ):
         """Run a query on the SERPClient"""
         client = SERPClient(api_base)
