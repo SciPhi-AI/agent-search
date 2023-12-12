@@ -8,6 +8,15 @@ This guide will walk you through the steps to quickly set up and run a demonstra
 
 Ensure you have Docker installed on your machine. If not, you can download and install it from [Docker's official website](https://www.docker.com/).
 
+### Quick Setup
+
+- To install the LocalSearch client, run the following:
+
+```shell
+git clone https://github.com/SciPhi-AI/local-search.git && cd local-search
+pip install -e .
+```
+
 ### Running a Query
 
 - To execute a query and see the LocalSearch in action, use the following command:
