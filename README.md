@@ -12,21 +12,13 @@ AgentSearch is a powerful new tool that allows you to operate a webscale search 
 
 ## Quickstart Guide for AgentSearch
 
-Follow this guide for a streamlined setup and demonstration of the AgentSearch project.
-
-### Prerequisites
-
-Make sure Docker is installed on your system. If not, download and install it from [Docker's official website](https://www.docker.com/).
-
-### Quick Setup
-
-1. Install the AgentSearch client by executing:
+### Install the AgentSearch client
 
    ```shell
    pip install agent-search
    ```
 
-### Running a Query
+### Run a Query
 
 - To perform a search with the hosted AgentSearch API, use:
 
@@ -34,9 +26,13 @@ Make sure Docker is installed on your system. If not, download and install it fr
   SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
   ```
 
-  Note that this command assumes you have followed the steps below to launch your local agent-first search engine. For remote access to our search engine, please register for a free API key at [AgentSearch](https://www.sciphi.ai/).
+  Please register first for free API key at [AgentSearch](https://www.sciphi.ai/). If you prefer to self-host then follow the steps below to launch your local agent-first search engine.
 
 ### Local Setup and Initialization
+
+#### Prerequisites
+
+Make sure Docker is installed on your system. If not, download and install it from [Docker's official website](https://www.docker.com/).
 
 1. **Database Population**:
    - Populate the SQLite database with this command:

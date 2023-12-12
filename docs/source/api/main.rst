@@ -63,7 +63,7 @@ A list SERPResult objects. Each object contains the following fields:
     ...
    ]
 
-AgentSearch v1 Endpoints
+AgentSearch Completion v1 Endpoints
 ~~~~~~~~~~~~~~~~~~~
 
 AgentSearch adheres to the API specification of OpenAI's API, allowing compatibility with any application designed for the OpenAI API. Below is an example curl command:
@@ -76,7 +76,7 @@ AgentSearch adheres to the API specification of OpenAI's API, allowing compatibi
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $SCIPHI_API_KEY" \
       -d '{
-         "model": "AgentSearch/AgentSearch-Self-RAG-Mistral-7B-32k",
+         "model": "SciPhi/SciPhi-Self-RAG-Mistral-7B-32k",
          "prompt": "Say this is a test.",
          "temperature": 0.2
        }'
@@ -89,7 +89,7 @@ AgentSearch adheres to the API specification of OpenAI's API, allowing compatibi
         "id":"cmpl-f03f53c15a174ffe89bdfc83507de7a9",
         "object":"text_completion",
         "created":1698730137,
-        "model":"AgentSearch/AgentSearch-Self-RAG-Mistral-7B-32k",
+        "model":"SciPhi/SciPhi-Self-RAG-Mistral-7B-32k",
         "choices":[
             {
                 "index":0,

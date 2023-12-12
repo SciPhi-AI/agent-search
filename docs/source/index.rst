@@ -46,18 +46,16 @@ Quick Setup
 
       pip install agent-search
 
-Running a Query
-+++++++++++++++
+2. Register at `AgentSearch Signup <https://www.sciphi.ai/signup>`_ for a free API key.
 
-- Execute a query with:
+3. Run a query:
 
   .. code-block:: shell
 
-     python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
-
-     # or, if you want to use a remote API:
-
      SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
+
+     # or, query your local instance after deployment as shown below
+     # python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
 
 
 Local Setup and Initialization
@@ -100,7 +98,7 @@ Citing Our Work
       doi = {Pending},
       month = {09},
       title = {{AgentSearch: An agent-first search engine.}},
-      url = {https://github.com/sciphi-ai/agent-search},
+      url = {https://github.com/SciPhi-AI/agent-search},
       year = {2023}
    }
 

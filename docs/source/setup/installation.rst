@@ -20,9 +20,6 @@ Installing AgentSearch is as simple as using pip:
 
    $ pip install agent-search
 
-Optional Extra Dependencies
----------------------------
-
 Development Setup
 -----------------
 
