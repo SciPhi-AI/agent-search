@@ -3,7 +3,7 @@ requires = ["poetry-core", "setuptools", "wheel"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "local_search"
+name = "agent_search"
 version = "0.1.7"
 description = "LocalSearch: An open source framework and dataset for webscale local search."
 authors = ["Owen Colegrove <owen@sciphi.ai>"]

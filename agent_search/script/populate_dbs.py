@@ -13,7 +13,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.http import models
 from qdrant_client.http.models import PointStruct
 
-from local_search.core.utils import load_config
+from agent_search.core.utils import load_config
 
 logger = logging.getLogger(__name__)
 

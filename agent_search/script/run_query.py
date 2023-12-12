@@ -3,7 +3,7 @@ import logging
 
 import requests
 
-from local_search.core import SERPClient
+from agent_search.core import SERPClient
 
 logger = logging.getLogger(__name__)
 
