@@ -1,1 +1,5 @@
+# local data
 data/
+**/__pycache__
+dist/
+test/

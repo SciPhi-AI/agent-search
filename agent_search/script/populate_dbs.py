@@ -115,7 +115,7 @@ class Populate:
 
     def populate_sqlite(
         self,
-        dataset="SciPhi/OpenWebSearch-V1",
+        dataset="AgentSearch/OpenWebSearch-V1",
         subset="arxiv",
         limit=10_000,
         log_interval=1_000,

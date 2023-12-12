@@ -8,7 +8,7 @@ AgentSearch is a powerful new tool that allows you to operate a webscale search 
 - **Gated Access**: Controlled and secure access to the search engine, ensuring data integrity and privacy.
 - **Offline Support**: Ability to operate in a fully offline environment.
 - **Customizable**: Upload your own local data or tailor the provided datasets according to your needs.
-- **API Endpoint**: SciPhi offers a fully managed access through a dedicated API, facilitating easy and efficient integration into various workflows.
+- **API Endpoint**: AgentSearch offers a fully managed access through a dedicated API, facilitating easy and efficient integration into various workflows.
 
 ## Quickstart Guide for AgentSearch
 
@@ -23,8 +23,7 @@ Make sure Docker is installed on your system. If not, download and install it fr
 1. Install the AgentSearch client by executing:
 
    ```shell
-   git clone https://github.com/SciPhi-AI/agent-search.git && cd agent-search
-   pip install -e .
+   pip install agent-search
    ```
 
 ### Running a Query
@@ -32,10 +31,10 @@ Make sure Docker is installed on your system. If not, download and install it fr
 - To perform a query and witness AgentSearch in action, use:
 
   ```shell
-  python agent_search/script/run_query.py query --query="What is Fermat's last theorem?"
+  python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
   ```
 
-  Note that this command assumes you have followed the steps below to launch your local agent-first search engine. For remote access to our search engine, please register for a free API key at [SciPhi](https://www.sciphi.ai/).
+  Note that this command assumes you have followed the steps below to launch your local agent-first search engine. For remote access to our search engine, please register for a free API key at [AgentSearch](https://www.sciphi.ai/).
 
 ### Local Setup and Initialization
 
@@ -43,7 +42,7 @@ Make sure Docker is installed on your system. If not, download and install it fr
    - Populate the SQLite database with this command:
 
      ```shell
-     python agent_search/script/populate_dbs.py populate_sqlite
+     python -m agent_search.script.populate_dbs populate_sqlite
      ```
 
      This creates a SQLite database `open_web_search.db` in the `data` directory. This script can be readily adopted to your own bespoke datasets. For a direct installation of the 1TB data into the database, please use [insert link].
@@ -63,7 +62,7 @@ Make sure Docker is installed on your system. If not, download and install it fr
    - Launch the AgentSearch server:
 
      ```shell
-     python agent_search/app/server.py
+     python -m agent_search.app.server
      ```
 
 ### Additional Notes
