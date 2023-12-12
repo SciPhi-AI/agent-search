@@ -1,12 +1,18 @@
-# LocalSearch [ΨΦ]: A Comprehensive Open Source Framework and Dataset for Webscale Search
+# AgentSearch [ΨΦ]: A Comprehensive Agent-First Framework and Dataset for Webscale Search
 
-LocalSearch is a powerful tool that enables you to operate your very own webscale search engine on a local scale. This repository, along with our open-source initiative, provides access to over one billion high-quality embeddings. These are derived from an extensive collection of content from quality sources such as Arxiv, Wikipedia, Project Gutenberg, and includes selectively filtered CC data.
+AgentSearch is a powerful new tool that allows you to operate a webscale search engine locally, catering to both Large Language Models (LLMs) and human users. This open-source initiative provides access to over one billion high-quality embeddings sourced from a wide array of content, including selectively filtered Creative Commons data and the entirety of Arxiv, Wikipedia, and Project Gutenberg.
 
-We also offer a fully managed access via an API endpoint.
+## Features of AgentSearch
 
-## Quickstart Guide for LocalSearch
+- **Gated Access**: Controlled and secure access to the search engine, ensuring data integrity and privacy.
+- **Customizable Datasets**: Flexibility to tailor datasets according to specific needs and research areas.
+- **LLM-Ready Metadata**: Metadata optimized for integration with Large Language Models, enhancing their performance and capabilities.
+- **Offline Support**: Ability to operate in a fully offline environment.
+- **API Endpoint**: SciPhi offers a fully managed access through a dedicated API, facilitating easy and efficient integration into various workflows.
 
-Follow this guide for a streamlined setup and demonstration of the LocalSearch project.
+## Quickstart Guide for AgentSearch
+
+Follow this guide for a streamlined setup and demonstration of the AgentSearch project.
 
 ### Prerequisites
 
@@ -14,19 +20,19 @@ Make sure Docker is installed on your system. If not, download and install it fr
 
 ### Quick Setup
 
-1. Install the LocalSearch client by executing:
+1. Install the AgentSearch client by executing:
 
    ```shell
-   git clone https://github.com/SciPhi-AI/local-search.git && cd local-search
+   git clone https://github.com/SciPhi-AI/agent-search.git && cd local-search
    pip install -e .
    ```
 
 ### Running a Query
 
-- To perform a query and witness LocalSearch in action, use:
+- To perform a query and witness AgentSearch in action, use:
 
   ```shell
-  python local_search/script/run_query.py query --query="What is Fermat's last theorem?"
+  python agent_search/script/run_query.py query --query="What is Fermat's last theorem?"
   ```
 
   Note that this command assumes you have followed the steps below to launch your local search engine. For remote access to our comprehensive database, please register for a free API key at [SciPhi](https://www.sciphi.ai/).
@@ -37,7 +43,7 @@ Make sure Docker is installed on your system. If not, download and install it fr
    - Populate the SQLite database with this command:
 
      ```shell
-     python local_search/script/populate_dbs.py populate_sqlite
+     python agent_search/script/populate_dbs.py populate_sqlite
      ```
 
      This creates a SQLite database `open_web_search.db` in the `data` directory. For a direct installation of the 1TB data into the database, please use [insert link].
@@ -54,13 +60,13 @@ Make sure Docker is installed on your system. If not, download and install it fr
      For installation guidance on Qdrant, refer to [their documentation](https://qdrant.tech/documentation/quick-start/).
 
 3. **Run the Server**:
-   - Launch the LocalSearch server:
+   - Launch the AgentSearch server:
 
      ```shell
-     python local_search/app/server.py
+     python agent_search/app/server.py
      ```
 
 ### Additional Notes
 
-- Run all commands from the root directory of the LocalSearch project.
+- Run all commands from the root directory of the AgentSearch project.
 - Replace the `query` in the run command with your desired search query.
