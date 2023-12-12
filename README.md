@@ -28,10 +28,10 @@ Make sure Docker is installed on your system. If not, download and install it fr
 
 ### Running a Query
 
-- To perform a query and witness AgentSearch in action, use:
+- To perform a search with the hosted AgentSearch API, use:
 
   ```shell
-  python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
+  SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
   ```
 
   Note that this command assumes you have followed the steps below to launch your local agent-first search engine. For remote access to our search engine, please register for a free API key at [AgentSearch](https://www.sciphi.ai/).

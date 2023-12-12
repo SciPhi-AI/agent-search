@@ -37,11 +37,13 @@ Features of AgentSearch
 Quickstart Guide for AgentSearch
 --------------------------------
 
-### Prerequisites
+Prerequisites
++++++++++++++
 
 - Docker installed on your system.
 
-### Quick Setup
+Quick Setup
++++++++++++
 
 1. Install the AgentSearch package:
 
@@ -49,13 +51,18 @@ Quickstart Guide for AgentSearch
 
       pip install agent-search
 
-### Running a Query
+Running a Query
++++++++++++++++
 
 - Execute a query with:
 
   .. code-block:: shell
 
      python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
+
+     # or, if you want to use a remote API:
+
+     SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
 
 Local Setup and Initialization
 -------------------------------
