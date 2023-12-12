@@ -37,11 +37,6 @@ Features of AgentSearch
 Quickstart Guide for AgentSearch
 --------------------------------
 
-Prerequisites
-+++++++++++++
-
-- Docker installed on your system.
-
 Quick Setup
 +++++++++++
 
@@ -64,8 +59,16 @@ Running a Query
 
      SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
 
+
 Local Setup and Initialization
 -------------------------------
+
+
+Prerequisites
++++++++++++++
+
+- Docker installed on your system.
+- Sqlite
 
 1. **Database Population**:
 

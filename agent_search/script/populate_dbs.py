@@ -3,15 +3,11 @@ import json
 import logging
 import os
 import queue
-import sqlite3
 import threading
 import uuid
 
 import fire
 from datasets import load_dataset
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
-from qdrant_client.http.models import PointStruct
 
 from agent_search.core.utils import load_config
 
@@ -63,6 +59,8 @@ def create_sqlite_table(conn, cursor, table_name) -> None:
 
 
 def create_qdrant_collection(client, config) -> None:
+    from qdrant_client.http import models
+
     client.create_collection(
         collection_name=config["qdrant_collection_name"],
         vectors_config=models.VectorParams(
@@ -121,6 +119,8 @@ class Populate:
         log_interval=1_000,
     ) -> None:
         """Populate the database with the given dataset and subset"""
+        import sqlite3
+
         if subset == "all":
             subset = "**"
 
@@ -158,6 +158,9 @@ class Populate:
 
     def populate_qdrant(self, batch_size=100) -> None:
         """Populate the database with the given dataset and subset"""
+        import sqlite3
+        from qdrant_client import QdrantClient
+        from qdrant_client.http.models import PointStruct
 
         output_queue = queue.Queue()
 
@@ -249,6 +252,18 @@ class Populate:
 
 
 if __name__ == "__main__":
+    try:
+        import sqlite3
+    except:
+        raise ImportError(
+            "The sqlite3 package is not installed. Please install it with `pip install sqlite3`"
+        )
+    try:
+        import qdrant_client
+    except:
+        raise ImportError(
+            "The qdrant-client package is not installed. Please install it with `pip install qdrant-client`"
+        )
     logging.basicConfig(level=logging.INFO)
     logger.setLevel(logging.INFO)
     fire.Fire(Populate)

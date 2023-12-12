@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import sqlite3
 from typing import List
 
 import numpy as np
@@ -21,6 +20,13 @@ class OpenWebSearch:
     def __init__(
         self,
     ):
+        try:
+            import sqlite3
+        except:
+            raise ImportError(
+                "The sqlite3 package is not installed. Please install it with `pip install sqlite3`"
+            )
+
         # Load the configuration
         self.config = load_config()["open_web_search"]
         logger.info(
@@ -104,6 +110,7 @@ class OpenWebSearch:
         limit: int = 100,
     ) -> List[SERPResult]:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
+        import sqlite3
 
         conn = sqlite3.connect(self.config["sqlite_db_rel_path"])
         cur = conn.cursor()
