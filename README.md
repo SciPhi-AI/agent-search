@@ -5,9 +5,8 @@ AgentSearch is a powerful new tool that allows you to operate a webscale search 
 ## Features of AgentSearch
 
 - **Gated Access**: Controlled and secure access to the search engine, ensuring data integrity and privacy.
-- **Customizable Datasets**: Flexibility to tailor datasets according to specific needs and research areas.
-- **LLM-Ready Metadata**: Metadata optimized for integration with Large Language Models, enhancing their performance and capabilities.
 - **Offline Support**: Ability to operate in a fully offline environment.
+- **Customizable**: Upload your own local data or tailor the provided datasets according to your needs.
 - **API Endpoint**: SciPhi offers a fully managed access through a dedicated API, facilitating easy and efficient integration into various workflows.
 
 ## Quickstart Guide for AgentSearch
