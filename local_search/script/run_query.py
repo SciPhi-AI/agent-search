@@ -23,12 +23,16 @@ class QueryWrapper:
 
         try:
             results = client.search(query)
-            for result in results:
+            for i, result in enumerate(results):
                 logging.info(
-                    f"URL: {result.url}, Score: {result.score}, Title: {result.title}"
+                    f"{i}. \033[94mURL: {result.url}\033[0m (Score: \033[95m{result.score:.2f}\033[0m)"
                 )
-                logging.info(f"Text: {result.text}\n")
+                logging.info("-" * 50)
+                logging.info(f"Title: \033[93m{result.title}\033[0m")
+                logging.info(f"Text:\n{result.text}\n")
+                # logging.info(f"Metadata:\n{result.metadata}...")
                 logging.info("-" * 80)
+
         except requests.HTTPError as e:
             logging.info(f"An error occurred: {e}")
 

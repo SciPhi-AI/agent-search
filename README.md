@@ -1,6 +1,6 @@
 # LocalSearch [ΨΦ]: A Comprehensive Open Source Framework and Dataset for Webscale Search
 
-LocalSearch is a powerful tool that enables you to operate your very own webscale search engine on a local scale. This repository, along with our open-source initiative, provides access to over one billion high-quality embeddings. These are derived from an extensive collection of content from renowned sources such as Arxiv, Wikipedia, Project Gutenberg, and includes selectively filtered CC data.
+LocalSearch is a powerful tool that enables you to operate your very own webscale search engine on a local scale. This repository, along with our open-source initiative, provides access to over one billion high-quality embeddings. These are derived from an extensive collection of content from quality sources such as Arxiv, Wikipedia, Project Gutenberg, and includes selectively filtered CC data.
 
 We also offer a fully managed access via an API endpoint.
 
