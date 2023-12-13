@@ -25,6 +25,9 @@ requests = "^2.31.0"
 pysqlite3 = "0.5.2"
 transformers = "^4.33.1"
 
+# Additional Requirements
+# torch, fastapi, uvicorn, sqlite3
+
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
 flake8 = "6.1.0"

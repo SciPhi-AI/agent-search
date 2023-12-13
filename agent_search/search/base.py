@@ -28,7 +28,7 @@ class OpenWebSearch:
             )
 
         # Load the configuration
-        self.config = load_config()["open_web_search"]
+        self.config = load_config()["agent_search"]
         logger.info(
             f"Connecting to collection: {self.config['qdrant_collection_name']}"
         )
@@ -48,20 +48,17 @@ class OpenWebSearch:
         self.pagerank_rerank_module = self.config["pagerank_rerank_module"]
         pagerank_file_path = self.config["pagerank_file_path"]
 
-        if (
-            not os.path.exists(pagerank_file_path)
-            and self.pagerank_rerank_module
-        ):
-            raise ValueError(
-                "Must have pagerank_file_path when using pagerank_rerank_module"
-            )
-
         if self.pagerank_rerank_module:
             if not pagerank_file_path:
                 # Simulating reading from a CSV file
                 pagerank_file_path = os.path.join(
                     os.path.dirname(__file__), "..", "data", "domain_ranks.csv"
                 )
+
+                if not os.path.exists(pagerank_file_path):
+                    raise ValueError(
+                        "Must have a pagerank file at the config specified path when using pagerank_rerank_module"
+                    )
 
             # Reading the CSV data using pandas
             df = pd.read_csv(pagerank_file_path)

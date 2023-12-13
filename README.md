@@ -41,7 +41,7 @@ Make sure Docker is installed on your system. If not, download and install it fr
      python -m agent_search.script.populate_dbs populate_sqlite
      ```
 
-     This creates a SQLite database `open_web_search.db` in the `data` directory. This script can be readily adopted to your own bespoke datasets. For a direct installation of the 1TB data into the database, please use [insert link].
+     This creates a SQLite database `agent_search.db` in the `data` directory. This script can be readily adopted to your own bespoke datasets. For a direct installation of the 1TB data into the database, please use [insert link].
 
 2. **Start Qdrant (vector database) Service with Docker**:
    - Run Qdrant service in a Docker container with this command, which sets up the necessary ports and storage:

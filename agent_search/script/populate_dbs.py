@@ -109,7 +109,7 @@ class Populate:
     """A class to populate the database with the given dataset and subset."""
 
     def __init__(self):
-        self.config = load_config()["open_web_search"]
+        self.config = load_config()["agent_search"]
 
     def populate_sqlite(
         self,
