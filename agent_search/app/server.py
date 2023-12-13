@@ -3,11 +3,18 @@ import time
 from typing import Optional
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-
 from agent_search.core.utils import load_config, select_top_urls
 from agent_search.search import OpenWebSearch
+
+# Attempt to import uvicorn and FastAPI
+try:
+    import uvicorn
+    from fastapi import FastAPI, HTTPException
+except ImportError as e:
+    raise ImportError(
+        "Required packages not installed: uvicorn and FastAPI. Please install them before running the server."
+    )
+
 
 logger = logging.getLogger(__name__)
 

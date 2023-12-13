@@ -2,7 +2,7 @@ import configparser
 from typing import List, Optional
 
 import numpy as np
-from local_web_search.core import SERPResult
+from agent_search.core import SERPResult
 
 
 def select_top_urls(
