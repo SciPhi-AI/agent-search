@@ -57,7 +57,7 @@ html_logo = "assets/logos/sciphi.png"
 html_theme_options = {
     "logo_only": True,
     "path_to_docs": "docs/source",
-    "repository_url": "https://github.com/AgentSearch-AI/sciphi",
+    "repository_url": "https://github.com/SciPhi-AI/agent-search",
     "use_repository_button": True,
 }
 
