@@ -18,19 +18,39 @@ from agent_search.core.utils import load_config
 
 logger = logging.getLogger(__name__)
 
+EMBEDDING_VEC_SIZE = 768
 
-def fetch_batch(pg_conn, table_name, start, end):
-    logger.info(f"Fetching batch form {start} to {end}")
-    pg_cursor = pg_conn.cursor()
-    pg_cursor.execute(
-        f"SELECT * FROM {table_name} OFFSET %s LIMIT %s", (start, end - start)
+
+def process_rows(rows, output_queue):
+    """Process the rows into qdrant point objects."""
+    qdrant_points = []
+    for row in rows:
+        id, url, embeddings_binary, text_chunks, title, metadata = row
+        embeddings = np.frombuffer(
+            embeddings_binary, dtype=np.float32
+        ).reshape(-1, EMBEDDING_VEC_SIZE)
+
+        text_chunks = json.loads(text_chunks)
+        # Prepare data for Qdrant
+        qdrant_points.append(
+            PointStruct(
+                id=str(uuid.uuid3(uuid.NAMESPACE_DNS, url)),
+                vector=[float(ele) for ele in embeddings[0]],
+                payload={"text": text_chunks[0], "url": url},
+            )
+        )
+
+    output_queue.put(qdrant_points)
+
+
+def qdrant_writer(config, qdrant_queue):
+    """A writer that listens for output events in a separate thread."""
+    qclient = QdrantClient(
+        config["qdrant_host"],
+        port=config["qdrant_grpc_port"],
+        prefer_grpc=config["qdrant_prefer_grpc"],
     )
-    batch = pg_cursor.fetchall()
-    pg_cursor.close()
-    return batch
 
-
-def qdrant_writer(qclient, collection_name, qdrant_queue):
     # SQLite and Qdrant setup
     logger.info("Launching Qdrant writer")
     while True:
@@ -40,93 +60,115 @@ def qdrant_writer(qclient, collection_name, qdrant_queue):
             if points is None:  # Sentinel to end the process
                 break
             operation_result = qclient.upsert(
-                collection_name=collection_name,
+                collection_name=config["qdrant_collection_name"],
                 wait=True,
                 points=points,
             )
-            logger.info(f"Finished Qdrant write-out with result {operation_result}...")
+            logger.info(
+                f"Finished Qdrant write-out with result {operation_result}..."
+            )
         except Exception as e:
             logger.info(f"Task failed with {e}")
 
 
-class PopulatePostgres:
+def process_batches(config, start, end, batch_size, output_queue):
+    """Processes the batches in steps of the given batch_size"""
+
+    # Connect to the database
+    conn = psycopg2.connect(
+        dbname=config["postgres_db"],
+        user=config["postgres_user"],
+        password=config["postgres_password"],
+        host=config["postgres_host"],
+        options="-c client_encoding=UTF8",
+    )
+    cur = conn.cursor()
+    # Declare a server-side cursor with offset
+    cur.execute(
+        f"DECLARE proc_cursor CURSOR FOR SELECT * FROM {config['postgres_table_name']} OFFSET {start} LIMIT {end - start}"
+    )
+
+    offset = start
+    while True:
+        logger.info(f"Fetching a batch of size {batch_size} at offset {offset}")
+        # Fetch a batch of rows
+        cur.execute(f"FETCH {batch_size} FROM proc_cursor")
+        rows = cur.fetchall()
+
+        
+        if len(rows) == 0:
+            break        
+
+        process_rows(rows, output_queue)
+        offset += batch_size
+        
+        # terminate
+        if len(rows) < batch_size:
+            break        
+
+    cur.close()
+    conn.close()
+
+
+class PopulateQdrant:
     def __init__(self):
         self.config = load_config()["agent_search"]
 
-    def run(self, batch_size=1_024, embedding_vec_size=768):
-        logger.info(
-            f"Initializing Qdrant Writer on collection {self.config['qdrant_collection_name']}..."
-        )
-        qclient = QdrantClient(
-            self.config["qdrant_host"],
-            port=self.config["qdrant_grpc_port"],
-            prefer_grpc=self.config["qdrant_prefer_grpc"],
-        )
-
+    def run(self, num_processes=1, batch_size=1_024):
+        """Runs the population process for the qdrant database"""
         qdrant_queue = multiprocessing.Queue()
         qdrant_writer_thread = multiprocessing.Process(
             target=qdrant_writer,
             args=(
-                qclient,
-                self.config["qdrant_collection_name"],
+                self.config,
                 qdrant_queue,
             ),
         )
         qdrant_writer_thread.start()
 
-        logger.info(
-            f"Initializing Postgres connection with table {self.config['postgres_table_name']}..."
-        )
-        pg_conn = psycopg2.connect(
+        conn = psycopg2.connect(
             dbname=self.config["postgres_db"],
             user=self.config["postgres_user"],
             password=self.config["postgres_password"],
             host=self.config["postgres_host"],
             options="-c client_encoding=UTF8",
         )
-        cur = pg_conn.cursor()
+        cur = conn.cursor()
 
-        # Start a transaction
-        cur.execute("BEGIN")
+        # Count total number of entries
+        cur.execute(f"SELECT COUNT(*) FROM {self.config['postgres_table_name']}")
+        total_count = cur.fetchone()[0]
+        logger.info(f"Processing {total_count} entries in {num_processes} processes")
+        
+        range_size = total_count // num_processes
 
-        # Declare a server-side cursor
-        cur.execute(
-            f"DECLARE my_cursor CURSOR FOR SELECT * FROM {self.config['postgres_table_name']}"
-        )
-        offset = 0
-        while True:
-            # Fetch a batch of rows
-            logger.info(f"Fetching batch at index {offset}")
-            cur.execute(f"FETCH {batch_size} FROM my_cursor")
-            rows = cur.fetchall()
-            offset += len(rows)
-            if len(rows) == 0:
-                break
-            qdrant_points = []
-            for row in rows:
-                id, url, embeddings_binary, text_chunks, title, metadata = row
-                embeddings = np.frombuffer(
-                    embeddings_binary, dtype=np.float32
-                ).reshape(-1, embedding_vec_size)
+        # Create and start multiprocessing workflow
+        processes = []
+        for i in range(num_processes):
+            logger.info(f"Starting process {i}...")
+            start = i * range_size
+            end = start + range_size if i < num_processes - 1 else total_count
+            proc = multiprocessing.Process(
+                target=process_batches,
+                args=(
+                    self.config,
+                    start,
+                    end,
+                    batch_size,
+                    qdrant_queue,
+                ),
+            )
+            processes.append(proc)
+            proc.start()
 
-                text_chunks = json.loads(text_chunks)
-                # Prepare data for Qdrant
-                qdrant_points.extend(
-                    [
-                        PointStruct(
-                            id=str(uuid.uuid3(uuid.NAMESPACE_DNS, url)),
-                            vector=[float(ele) for ele in embedding],
-                            payload={"text": text_chunks[i], "url": url},
-                        )
-                        for i, embedding in enumerate(embeddings)
-                    ]
-                )
-            print("putting into queue...")
-            qdrant_queue.put(qdrant_points)
-        qdrant_queue.put(None)
+        # Wait for all processes to finish
+        for proc in processes:
+            proc.join()
 
-
+        cur.close()
+        conn.close()
+        
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     logger.setLevel(logging.INFO)
-    fire.Fire(PopulatePostgres)
+    fire.Fire(PopulateQdrant)
