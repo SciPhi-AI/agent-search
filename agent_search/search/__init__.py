@@ -1,3 +1,3 @@
-from .base import OpenWebSearch
+from .base import WebSearchEngine
 
-__all__ = ["OpenWebSearch"]
+__all__ = ["WebSearchEngine"]

@@ -18,65 +18,54 @@ from agent_search.core.utils import (
 logger = logging.getLogger(__name__)
 
 
-class OpenWebSearch:
+class WebSearchEngine:
     """A simple search client for the OpenSearch collection"""
 
     def __init__(
         self,
     ):
         try:
-            import sqlite3
+            import psycopg2
         except:
             raise ImportError(
-                "The sqlite3 package is not installed. Please install it with `pip install sqlite3`."
+                "The psycopg2 package is not installed. Please install it with `pip install psycopg2` to run an WebSearchEngine instance."
             )
 
         # Load config
         self.config = load_config()["agent_search"]
 
-        # Load SQLite database
+        # Load Postgres
         logger.info(
-            f"Connecting to SQLite database at: {self.config['sqlite_db']}."
+            f"Connecting to Postgres database at: {self.config['postgres_db']}."
         )
-        self.sqlite_db_path = os.path.join(
-            get_data_path(), self.config["sqlite_db"]
+        self.conn = psycopg2.connect(
+            dbname=self.config["postgres_db"],
+            user=self.config["postgres_user"],
+            password=self.config["postgres_password"],
+            host=self.config["postgres_host"],
+            options="-c client_encoding=UTF8",
         )
-        if not os.path.exists(self.sqlite_db_path):
-            raise ValueError(
-                f"Must have a SQLite database at the config with the specified path {self.config['sqlite_db']}."
-            )
-
-        # self.sqlite_in_memory = self.config.get('sqlite_in_memory', False)
-        # if self.sqlite_in_memory:
-        #     # Connect to an in-memory database
-        #     self.conn = sqlite3.connect(":memory:")
-        #     self._load_db_into_memory(self.sqlite_db_path)
+        self.cur = self.conn.cursor()
 
         # Load qdrant client
         logger.info(
             f"Connecting to collection: {self.config['qdrant_collection_name']}"
         )
-        self.collection_name = self.config["qdrant_collection_name"]
+        self.qdrant_collection_name = self.config["qdrant_collection_name"]
         self.client = QdrantClient(
             self.config["qdrant_host"],
             grpc_port=self.config["qdrant_grpc_port"],
             prefer_grpc=True,
         )
-        print(
-            "self.client.get_collection(self.collection_name) = ",
-            self.client.get_collection(self.collection_name),
-        )
-        if not self.client.get_collection(self.collection_name):
+        if not self.client.get_collection(self.qdrant_collection_name):
             raise ValueError(
-                f"Must have a Qdrant collection with the name {self.collection_name}."
+                f"Must have a Qdrant collection with the name {self.qdrant_collection_name}."
             )
 
         # Load embedding model
         self.embedding_model = AutoModel.from_pretrained(
             self.config["embedding_model_name"], trust_remote_code=True
         )
-
-        self.sqlite_table_name = self.config["sqlite_table_name"]
 
         self.pagerank_rerank_module = self.config["pagerank_rerank_module"]
         pagerank_file_path = self.config["pagerank_file_path"]
@@ -116,7 +105,7 @@ class OpenWebSearch:
         """Searches the collection for the given query and returns the top 'limit' results"""
 
         points = self.client.search(
-            collection_name=self.collection_name,
+            collection_name=self.qdrant_collection_name,
             query_vector=query_vector,
             limit=limit,
         )
@@ -139,19 +128,13 @@ class OpenWebSearch:
         limit: int = 100,
     ) -> List[SERPResult]:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
-        import sqlite3
-
-        conn = sqlite3.connect(self.sqlite_db_path)
-        cur = conn.cursor()
-
         # SQL query to fetch the entries for the URLs
         # Assuming 'urls' is a list of URL strings
-        placeholders = ", ".join("?" * len(urls))
-        query = f"SELECT * FROM {self.sqlite_table_name} WHERE url IN ({placeholders})"
+        query = f"SELECT url, title, metadata, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url IN %s"
 
         # Fetch all results
-        cur.execute(query, tuple(urls))
-        results = cur.fetchall()
+        self.cur.execute(query, (tuple(urls),))
+        results = self.cur.fetchall()
 
         # List to store the results along with their similarity scores
         similarity_results = []
@@ -159,16 +142,15 @@ class OpenWebSearch:
         # Iterate over each result to find the most similar text chunk
         for result in results:
             (
-                _,
                 url,
                 title,
                 metadata,
-                dataset,
                 text_chunks_str,
-                embeddings_str,
+                embeddings_binary
             ) = result
+            # deserialize the embeddings and text chunks
+            embeddings = np.frombuffer(embeddings_binary, dtype=np.float32).reshape(-1, 768)
             text_chunks = json.loads(text_chunks_str)
-            embeddings = json.loads(embeddings_str)
             max_similarity = -1
             most_similar_chunk = None
 
@@ -188,14 +170,13 @@ class OpenWebSearch:
                     url=url,
                     title=title,
                     metadata=json.loads(metadata),
-                    dataset=dataset,
+                    dataset="null",
                     text=most_similar_chunk,
                 ),
             )
 
         # Sort the results based on similarity score in descending order
         similarity_results.sort(key=lambda x: x.score, reverse=True)
-        conn.close()
         return similarity_results[:limit]
 
     def pagerank_reranking(
@@ -206,7 +187,7 @@ class OpenWebSearch:
         """Reranks the results based on the PageRank score of the domain"""
         if not self.pagerank_rerank_module:
             raise Exception(
-                "PageRank reranking module is not enabled. Please set pagerank_rerank_module=True while initializing the OpenWebSearch client."
+                "PageRank reranking module is not enabled. Please set pagerank_rerank_module=True while initializing the WebSearchEngine client."
             )
         # List to store the results along with their PageRank scores
         pagerank_results = []

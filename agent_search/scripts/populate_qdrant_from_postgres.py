@@ -51,7 +51,6 @@ def qdrant_writer(config, qdrant_queue):
         prefer_grpc=config["qdrant_prefer_grpc"],
     )
 
-    # SQLite and Qdrant setup
     logger.info("Launching Qdrant writer")
     while True:
         try:
@@ -114,7 +113,7 @@ class PopulateQdrant:
     def __init__(self):
         self.config = load_config()["agent_search"]
 
-    def run(self, num_processes=1, batch_size=1_024):
+    def run(self, num_processes=16, batch_size=1_024):
         """Runs the population process for the qdrant database"""
         qdrant_queue = multiprocessing.Queue()
         qdrant_writer_thread = multiprocessing.Process(

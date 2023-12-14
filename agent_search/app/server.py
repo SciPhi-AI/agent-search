@@ -5,7 +5,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 from agent_search.core.utils import load_config, select_top_urls
-from agent_search.search import OpenWebSearch
+from agent_search.search import WebSearchEngine
 
 # Attempt to import uvicorn and FastAPI
 try:
@@ -35,7 +35,7 @@ def timed_fn(fn):
 
 class SearchServer:
     def __init__(self):
-        self.client = OpenWebSearch()
+        self.client = WebSearchEngine()
 
     def run(
         self,
@@ -46,7 +46,7 @@ class SearchServer:
         limit_final_pagerank_results=10,
         url_contains_filter=None,
     ):
-        """Run a search query using the OpenWebSearch client"""
+        """Run a search query using the WebSearchEngine client"""
         query_vector = self.client.get_query_vector(query)
         broad_results = timed_fn(self.client.similarity_search)(
             query_vector=query_vector, limit=limit_broad_results
@@ -135,4 +135,4 @@ def run_search(query: SearchQuery):
 if __name__ == "__main__":
     config = load_config()["server"]
     logging.basicConfig(level=config["log_level"])
-    uvicorn.run(app, host=config["host"], port=8002)  # int(config["port"]))
+    uvicorn.run(app, host=config["host"], port=int(config["port"]))
