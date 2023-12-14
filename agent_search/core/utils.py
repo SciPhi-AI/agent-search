@@ -1,8 +1,9 @@
-import os
 import configparser
+import os
 from typing import List, Optional
 
 import numpy as np
+
 from agent_search.core import SERPResult
 
 

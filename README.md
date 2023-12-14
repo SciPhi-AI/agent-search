@@ -23,7 +23,7 @@ AgentSearch is a powerful new tool that allows you to operate a webscale search 
 - To perform a search with the hosted AgentSearch API, use:
 
   ```shell
-  SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
+  SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
   ```
 
   Please register first for free API key at [AgentSearch](https://www.sciphi.ai/). If you prefer to self-host then follow the steps below to launch your local agent-first search engine.
@@ -38,7 +38,7 @@ Make sure Docker is installed on your system. If not, download and install it fr
    - Populate the SQLite database with this command:
 
      ```shell
-     python -m agent_search.script.populate_dbs populate_sqlite
+     python -m agent_search.scripts.populate_dbs populate_sqlite
      ```
 
      This creates a SQLite database `agent_search.db` in the `data` directory. This script can be readily adopted to your own bespoke datasets. For a direct installation of the 1TB data into the database, please use [insert link].

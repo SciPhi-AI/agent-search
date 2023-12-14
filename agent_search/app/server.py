@@ -3,6 +3,7 @@ import time
 from typing import Optional
 
 from pydantic import BaseModel
+
 from agent_search.core.utils import load_config, select_top_urls
 from agent_search.search import OpenWebSearch
 

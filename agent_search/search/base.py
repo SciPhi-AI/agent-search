@@ -11,8 +11,8 @@ from transformers import AutoModel
 from agent_search.core import SERPResult
 from agent_search.core.utils import (
     cosine_similarity,
-    load_config,
     get_data_path,
+    load_config,
 )
 
 logger = logging.getLogger(__name__)
@@ -58,8 +58,8 @@ class OpenWebSearch:
         )
         self.collection_name = self.config["qdrant_collection_name"]
         self.client = QdrantClient(
-            self.config["qdrant_client_host"],
-            grpc_port=self.config["qdrant_client_grpc_port"],
+            self.config["qdrant_host"],
+            grpc_port=self.config["qdrant_grpc_port"],
             prefer_grpc=True,
         )
         print(

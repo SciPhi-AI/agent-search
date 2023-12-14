@@ -52,10 +52,10 @@ Quick Setup
 
   .. code-block:: shell
 
-     SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
+     SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
 
      # or, query your local instance after deployment as shown below
-     # python -m agent_search.script.run_query query --query="What is Fermat's last theorem?"
+     # python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
 
 
 Local Setup and Initialization
@@ -72,7 +72,7 @@ Prerequisites
 
    .. code-block:: shell
 
-      python -m agent_search.script.populate_dbs populate_sqlite
+      python -m agent_search.scripts.populate_dbs populate_sqlite
 
 2. **Start Qdrant Service with Docker**:
 
