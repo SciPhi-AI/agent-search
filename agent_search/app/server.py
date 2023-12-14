@@ -84,7 +84,7 @@ class SearchServer:
                 self.client.pagerank_reranking
             )(hierarchical_url_results)[:limit_final_pagerank_results]
             logger.debug(
-                "Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
+                f"Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
             )
 
             # Print or process the sorted results
@@ -134,4 +134,4 @@ def run_search(query: SearchQuery):
 if __name__ == "__main__":
     config = load_config()["server"]
     logging.basicConfig(level=config["log_level"])
-    uvicorn.run(app, host=config["host"], port=int(config["port"]))
+    uvicorn.run(app, host=config["host"], port=8002)  # int(config["port"]))

@@ -9,7 +9,11 @@ from qdrant_client import QdrantClient
 from transformers import AutoModel
 
 from agent_search.core import SERPResult
-from agent_search.core.utils import cosine_similarity, load_config
+from agent_search.core.utils import (
+    cosine_similarity,
+    load_config,
+    get_data_path,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +28,31 @@ class OpenWebSearch:
             import sqlite3
         except:
             raise ImportError(
-                "The sqlite3 package is not installed. Please install it with `pip install sqlite3`"
+                "The sqlite3 package is not installed. Please install it with `pip install sqlite3`."
             )
 
-        # Load the configuration
+        # Load config
         self.config = load_config()["agent_search"]
+
+        # Load SQLite database
+        logger.info(
+            f"Connecting to SQLite database at: {self.config['sqlite_db']}."
+        )
+        self.sqlite_db_path = os.path.join(
+            get_data_path(), self.config["sqlite_db"]
+        )
+        if not os.path.exists(self.sqlite_db_path):
+            raise ValueError(
+                f"Must have a SQLite database at the config with the specified path {self.config['sqlite_db']}."
+            )
+
+        # self.sqlite_in_memory = self.config.get('sqlite_in_memory', False)
+        # if self.sqlite_in_memory:
+        #     # Connect to an in-memory database
+        #     self.conn = sqlite3.connect(":memory:")
+        #     self._load_db_into_memory(self.sqlite_db_path)
+
+        # Load qdrant client
         logger.info(
             f"Connecting to collection: {self.config['qdrant_collection_name']}"
         )
@@ -38,7 +62,16 @@ class OpenWebSearch:
             grpc_port=self.config["qdrant_client_grpc_port"],
             prefer_grpc=True,
         )
+        print(
+            "self.client.get_collection(self.collection_name) = ",
+            self.client.get_collection(self.collection_name),
+        )
+        if not self.client.get_collection(self.collection_name):
+            raise ValueError(
+                f"Must have a Qdrant collection with the name {self.collection_name}."
+            )
 
+        # Load embedding model
         self.embedding_model = AutoModel.from_pretrained(
             self.config["embedding_model_name"], trust_remote_code=True
         )
@@ -47,12 +80,11 @@ class OpenWebSearch:
 
         self.pagerank_rerank_module = self.config["pagerank_rerank_module"]
         pagerank_file_path = self.config["pagerank_file_path"]
-
         if self.pagerank_rerank_module:
             if not pagerank_file_path:
                 # Simulating reading from a CSV file
                 pagerank_file_path = os.path.join(
-                    os.path.dirname(__file__), "..", "data", "domain_ranks.csv"
+                    get_data_path(), "domain_ranks.csv"
                 )
 
                 if not os.path.exists(pagerank_file_path):
@@ -109,7 +141,7 @@ class OpenWebSearch:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
         import sqlite3
 
-        conn = sqlite3.connect(self.config["sqlite_db_rel_path"])
+        conn = sqlite3.connect(self.sqlite_db_path)
         cur = conn.cursor()
 
         # SQL query to fetch the entries for the URLs
