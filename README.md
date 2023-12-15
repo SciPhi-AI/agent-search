@@ -1,67 +1,95 @@
 # AgentSearch [ΨΦ]: A Comprehensive Agent-First Framework and Dataset for Webscale Search
-![agent_search_banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/56268e41-130f-4d2f-ba22-b565f7642713)
 
-AgentSearch is a powerful new tool that allows you to operate a webscale search engine locally, catering to both Large Language Models (LLMs) and human users. This open-source initiative provides access to over one billion high-quality embeddings sourced from a wide array of content, including selectively filtered Creative Commons data and the entirety of Arxiv, Wikipedia, and Project Gutenberg.
+![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/56268e41-130f-4d2f-ba22-b565f7642713)
+
+AgentSearch is a powerful new tool designed for data scientists, developers, and researchers, allowing you to operate a webscale search engine locally. It's ideal for both Large Language Models (LLMs) and human users, providing access to over one billion high-quality embeddings from diverse sources like Creative Commons, Arxiv, Wikipedia, and Project Gutenberg.
 
 ## Features of AgentSearch
 
-- **Gated Access**: Controlled and secure access to the search engine, ensuring data integrity and privacy.
-- **Offline Support**: Ability to operate in a fully offline environment.
-- **Customizable**: Upload your own local data or tailor the provided datasets according to your needs.
-- **API Endpoint**: AgentSearch offers a fully managed access through a dedicated API, facilitating easy and efficient integration into various workflows.
+- **Gated Access**: Ensures controlled and secure access to the search engine, maintaining data integrity and privacy.
+- **Offline Support**: Facilitates operation in a completely offline environment.
+- **Customizable**: Allows uploading of local data or tailoring of provided datasets to meet specific needs.
+- **API Endpoint**: Offers fully managed access through a dedicated API for seamless integration into various workflows.
 
 ## Quickstart Guide for AgentSearch
 
-### Install the AgentSearch client
+### Install the AgentSearch Client
 
-   ```shell
-   pip install agent-search
-   ```
+```shell
+pip install agent-search
+```
 
 ### Run a Query
 
-- To perform a search with the hosted AgentSearch API, use:
+- To perform a search with the hosted AgentSearch API:
 
-  ```shell
-  SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
-  ```
+```shell
+SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
+```
 
-  Please register first for free API key at [AgentSearch](https://www.sciphi.ai/). If you prefer to self-host then follow the steps below to launch your local agent-first search engine.
+Register first for a free API key at [AgentSearch Signup](https://www.sciphi.ai/). For self-hosting, follow the steps below.
 
 ### Local Setup and Initialization
 
 #### Prerequisites
 
-Make sure Docker is installed on your system. If not, download and install it from [Docker's official website](https://www.docker.com/).
+Ensure Docker and Postgres are installed on your system. 
+- [Download Docker here](https://www.docker.com/).
+- [Download Postgres here](https://www.postgresql.org/download/).
 
-1. **Database Population**:
-   - Populate the SQLite database with this command:
+---
 
+This addition provides users with direct links to download both Docker and Postgres, ensuring they have the necessary tools to proceed with the AgentSearch setup.
+#### Steps:
+
+1. **Launch Postgres Database**:
+   - Start the Postgres service on your system:
      ```shell
-     python -m agent_search.scripts.populate_dbs populate_sqlite
+     # Command to start Postgres, adjust based on your system's configuration
+     sudo service postgresql start
      ```
+   - This step ensures that the Postgres database is running and ready to be populated.
 
-     This creates a SQLite database `agent_search.db` in the `data` directory. This script can be readily adopted to your own bespoke datasets. For a direct installation of the 1TB data into the database, please use [insert link].
+2. **Relational Database Population**:
+   - Command to populate the Postgres database:
+     ```shell
+     python -m agent_search.scripts.populate_postgres_from_hf run
+     ```
+   - This script populates the database defined in `config.ini`, adaptable to custom datasets. For assistance with the 4TB postgres database installation, contact [our team](mailto:owen@sciphi.ai).
 
-2. **Start Qdrant (vector database) Service with Docker**:
-   - Run Qdrant service in a Docker container with this command, which sets up the necessary ports and storage:
-
+3. **Start Qdrant Service with Docker**:
+   - Run the Qdrant service in Docker:
      ```shell
      docker run -p 6333:6333 -p 6334:6334 \
          -v $(pwd)/qdrant_storage:/qdrant/storage:z \
          qdrant/qdrant
      ```
+   - For Qdrant installation guidance, see [Qdrant Documentation](https://qdrant.tech/documentation/quick-start/).
 
-     For installation guidance on Qdrant, refer to [their documentation](https://qdrant.tech/documentation/quick-start/).
+4. **Vector Database Population**:
+   - Populate the Vector database:
+     ```shell
+     python -m agent_search.scripts.populate_qdrant_from_postgres run --delete_existing=True
+     ```
+   - This step prepares the qdrant vector database as described in `config.ini`. For direct installation assistance, contact [our team](mailto:owen@sciphi.ai).
 
-3. **Run the Server**:
+5. **Run the Server**:
    - Launch the AgentSearch server:
-
      ```shell
      python -m agent_search.app.server
      ```
 
 ### Additional Notes
 
-- Run all commands from the root directory of the AgentSearch project.
-- Replace the `query` in the run command with your desired search query.
+- Execute all commands from the root directory of the AgentSearch project.
+- Replace `query` in the run command with your search query.
+- Check back soon for our User Guide. 
+<!-- [User Guide](link-to-user-guide). -->
+
+## Troubleshooting and FAQs
+
+Encounter an issue? Check our [FAQs](link-to-faqs) or visit our [community forum](link-to-forum) for support.
+
+## Version Information
+
+Currently running AgentSearch version: 0.0.2.

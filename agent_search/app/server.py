@@ -13,7 +13,7 @@ try:
     from fastapi import FastAPI, HTTPException
 except ImportError as e:
     raise ImportError(
-        "Required packages not installed: uvicorn and FastAPI. Please install them before running the server."
+        f"Error: {e}, Note - both uvicorn and FastAPI are required to run the server."
     )
 
 

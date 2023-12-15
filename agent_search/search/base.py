@@ -26,9 +26,9 @@ class WebSearchEngine:
     ):
         try:
             import psycopg2
-        except:
+        except ImportError as e:
             raise ImportError(
-                "The psycopg2 package is not installed. Please install it with `pip install psycopg2` to run an WebSearchEngine instance."
+                f"Error {e} while imoprting psycopg2. Please install it with `pip install psycopg2` to run an WebSearchEngine instance."
             )
 
         # Load config
@@ -130,7 +130,7 @@ class WebSearchEngine:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
         # SQL query to fetch the entries for the URLs
         # Assuming 'urls' is a list of URL strings
-        query = f"SELECT url, title, metadata, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url IN %s"
+        query = f"SELECT url, title, metadata, dataset, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url IN %s"
 
         # Fetch all results
         self.cur.execute(query, (tuple(urls),))
@@ -141,15 +141,11 @@ class WebSearchEngine:
 
         # Iterate over each result to find the most similar text chunk
         for result in results:
-            (
-                url,
-                title,
-                metadata,
-                text_chunks_str,
-                embeddings_binary
-            ) = result
+            (url, title, metadata, dataset, text_chunks_str, embeddings_binary) = result
             # deserialize the embeddings and text chunks
-            embeddings = np.frombuffer(embeddings_binary, dtype=np.float32).reshape(-1, 768)
+            embeddings = np.frombuffer(
+                embeddings_binary, dtype=np.float32
+            ).reshape(-1, 768)
             text_chunks = json.loads(text_chunks_str)
             max_similarity = -1
             most_similar_chunk = None
@@ -170,7 +166,7 @@ class WebSearchEngine:
                     url=url,
                     title=title,
                     metadata=json.loads(metadata),
-                    dataset="null",
+                    dataset=dataset,
                     text=most_similar_chunk,
                 ),
             )
