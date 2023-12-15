@@ -9,7 +9,7 @@ Welcome to AgentSearch [ΨΦ]
 .. raw:: html
 
    <p style="text-align:center">
-   <strong>AI's Knowledge Engine.
+   <strong>An agent-first search engine.
    </strong>
    </p>
 
@@ -47,13 +47,43 @@ Quick Setup
 
 2. Register at `AgentSearch Signup <https://www.sciphi.ai/signup>`_ for a free API key.
 
-3. Run a query:
+3. Run a search:
 
   .. code-block:: shell
 
-     SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
+     SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
 
      # For self-hosted local instances, follow the local setup steps below.
+
+
+4. Create a RAG grounded response:
+
+  .. code-block:: shell
+
+     SCIPHI_API_KEY=$SCIPHI_API_KEY OPENAI_API_KEY=$OPENAI_API_KEY python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
+
+     # For self-hosted local instances, follow the local setup steps below.     
+
+Example Outputs from Queries
+-------------------------------
+
+- Standard Search Output:
+
+  ```output
+  INFO:root:1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
+  INFO:root:--------------------------------------------------
+  INFO:root:Title: Wiles's proof of Fermat's Last Theorem
+  INFO:root:Text:
+  is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves. Together with Ribet's theorem, it provides a proof for Fermat's Last Theorem. Both Fermat's Last Theorem and the modularity theorem were almost universally considered inaccessible to proof by contemporaneous mathematicians, meaning that they were believed to be impossible to prove using current knowledge.
+  ...
+  ```
+
+- RAG Grounded Response Output:
+
+  ```output
+  ...
+  Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
+  ```
 
 Local Setup and Initialization
 -------------------------------
@@ -119,22 +149,8 @@ Ensure Docker and Postgres are installed on your system.
 Additional Notes
 ----------------
 
-- Ensure all commands are executed from the root directory of the AgentSearch project.
+- Ensure all installation commands are executed from the root directory of the AgentSearch project.
 - Customize the `query` in the command to fit your search needs.
-
-Citing Our Work
----------------
-
-.. code-block:: none
-
-   @software{AgentSearch,
-      author = {Colegrove, Owen},
-      doi = {Pending},
-      month = {09},
-      title = {{AgentSearch: An agent-first search engine.}},
-      url = {https://github.com/SciPhi-AI/agent-search},
-      year = {2023}
-   }
 
 Documentation
 -------------

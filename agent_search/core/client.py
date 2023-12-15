@@ -48,7 +48,7 @@ class SERPClient:
         limit_broad_results: int = 1_000,
         limit_deduped_url_results: int = 100,
         limit_hierarchical_url_results: int = 25,
-        limit_final_pagerank_results: int = 10
+        limit_final_pagerank_results: int = 10,
     ) -> List[SERPResult]:
         headers = {
             "Authorization": f"Bearer {self.auth_token}",

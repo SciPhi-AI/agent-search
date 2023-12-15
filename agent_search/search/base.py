@@ -1,3 +1,4 @@
+import csv
 import json
 import logging
 import os
@@ -89,7 +90,7 @@ class WebSearchEngine:
                 reader = csv.DictReader(csvfile)
                 for row in reader:
                     domain = row["Domain"]
-                    rank = row["Open Page Rank"]
+                    rank = float(row["Open Page Rank"])
                     self.domain_to_rank_map[domain] = rank
 
     def get_query_vector(self, query: str):

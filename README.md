@@ -19,12 +19,36 @@ AgentSearch is a powerful new tool designed for data scientists, developers, and
 pip install agent-search
 ```
 
-### Run a Query
+### Perform a Search
 
 - To perform a search with the hosted AgentSearch API:
 
 ```shell
-SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
+SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
+```
+
+Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
+
+```output
+INFO:root:1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
+INFO:root:--------------------------------------------------
+INFO:root:Title: Wiles's proof of Fermat's Last Theorem
+INFO:root:Text:
+is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves. Together with Ribet's theorem, it provides a proof for Fermat's Last Theorem. Both Fermat's Last Theorem and the modularity theorem were almost universally considered inaccessible to proof by contemporaneous mathematicians, meaning that they were believed to be impossible to prove using current knowledge.
+...
+```
+
+### Generate a RAG response
+
+- To perform a search with the hosted AgentSearch API:
+
+```shell
+SCIPHI_API_KEY=$SCIPHI_API_KEY OPENAI_API_KEY=$OPENAI_API_KEY python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
+```
+
+```output
+...
+Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
 ```
 
 Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
