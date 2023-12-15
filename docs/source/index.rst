@@ -28,10 +28,9 @@ AgentSearch is a powerful new tool that allows you to operate a webscale search 
 Features of AgentSearch
 ------------------------
 
-- **Gated Access**: Controlled and secure access to the search engine, ensuring data integrity and privacy.
-- **Offline Support**: Ability to operate in a fully offline environment.
-- **Customizable**: Upload your own local data or tailor the provided datasets according to your needs.
-- **API Endpoint**: Fully managed access through a dedicated API, facilitating easy and efficient integration into various workflows.
+- **Customizable**: Upload local data or adapt provided datasets to meet specific requirements.
+- **Offline Support**: Operates in a completely offline environment.
+- **API Endpoint**: Offers fully managed access through a dedicated API for seamless integration into various workflows.
 
 Quickstart Guide for AgentSearch
 --------------------------------
@@ -39,30 +38,30 @@ Quickstart Guide for AgentSearch
 Quick Setup
 +++++++++++
 
-1. Install the AgentSearch package:
+1. Install the AgentSearch client:
 
    .. code-block:: shell
 
       pip install agent-search
 
-2. Register at `AgentSearch Signup <https://www.sciphi.ai/signup>`_ for a free API key.
+2. Obtain a free API key from SciPhi:
 
-3. Run a search:
+   `SciPhi API Key Signup <https://www.sciphi.ai/signup>`_
 
-  .. code-block:: shell
+3. Perform a Search:
 
-     SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
+   .. code-block:: shell
 
-     # For self-hosted local instances, follow the local setup steps below.
+      export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+      python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
 
+4. Generate a RAG Response:
 
-4. Create a RAG grounded response:
+   .. code-block:: shell
 
-  .. code-block:: shell
-
-     SCIPHI_API_KEY=$SCIPHI_API_KEY OPENAI_API_KEY=$OPENAI_API_KEY python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
-
-     # For self-hosted local instances, follow the local setup steps below.     
+      export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+      export OPENAI_API_KEY=MY_OPENAI_KEY
+      python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 
 Example Outputs from Queries
 -------------------------------
@@ -70,18 +69,16 @@ Example Outputs from Queries
 - Standard Search Output:
 
   ```output
-  INFO:root:1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
-  INFO:root:--------------------------------------------------
-  INFO:root:Title: Wiles's proof of Fermat's Last Theorem
-  INFO:root:Text:
-  is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves. Together with Ribet's theorem, it provides a proof for Fermat's Last Theorem. Both Fermat's Last Theorem and the modularity theorem were almost universally considered inaccessible to proof by contemporaneous mathematicians, meaning that they were believed to be impossible to prove using current knowledge.
-  ...
+  1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
+  --------------------------------------------------
+  Title: Wiles's proof of Fermat's Last Theorem
+  Text:
+  is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves... Output Continues ...
   ```
 
-- RAG Grounded Response Output:
+- RAG Response Output:
 
   ```output
-  ...
   Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
   ```
 
@@ -91,60 +88,41 @@ Local Setup and Initialization
 Prerequisites
 +++++++++++++
 
-Ensure Docker and Postgres are installed on your system. 
-- For Docker: `Download from Docker's official website <https://www.docker.com/>`.
-- For Postgres: `Download from PostgreSQL's official website <https://www.postgresql.org/download/>`.
+Ensure Docker and Postgres are installed:
+
+- Docker: `Download from Docker's official website <https://www.docker.com/>`.
+- Postgres: `Download from PostgreSQL's official website <https://www.postgresql.org/download/>`.
 
 1. **Launch Postgres Database**:
 
-   Start the Postgres service on your system:
-
    .. code-block:: shell
 
-      # Command to start Postgres, adjust based on your system's configuration
       sudo service postgresql start
 
-   Ensure that the Postgres database is running and ready for data population.
-
-2. **Relational (Postgres) Database Population**:
-
-   Populate your Postgres database using:
+2. **Populate Relational Database (Postgres)**:
 
    .. code-block:: shell
 
-      python -m agent_search.scripts.populate_dbs populate_postgres_from_hf run
-
-   This script sets up and populates the Postgres database defined in `config.ini`.
+      python -m agent_search.scripts.populate_postgres_from_hf run
 
 3. **Start Qdrant Service with Docker**:
 
-   Run Qdrant in a Docker container:
+   .. code-block:: shell
+
+      docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+
+4. **Populate Vector Database (Qdrant)**:
 
    .. code-block:: shell
 
-      docker run -p 6333:6333 -p 6334:6334 \
-          -v $(pwd)/qdrant_storage:/qdrant/storage:z \
-          qdrant/qdrant
-
-   For more details on Qdrant installation, refer to `Qdrant Documentation <https://qdrant.tech/documentation/quick-start/>`.
-
-4. **Vector (Qdrant) Database Population**:
-
-   Populate the Vector database:
-
-   .. code-block:: shell
-
-      python -m agent_search.scripts.populate_dbs populate_qdrant_from_postgres run --delete_existing=True
-
-   This script sets up and populates the Qdrant vector database as per `config.ini`.
+      python -m agent_search.scripts.populate_qdrant_from_postgres run --delete_existing=True
 
 5. **Run the Server**:
 
-   Launch the AgentSearch server:
-
    .. code-block:: shell
 
-      python -m agent_search.app.server.py
+      python -m agent_search.app.server
+
 
 Additional Notes
 ----------------
