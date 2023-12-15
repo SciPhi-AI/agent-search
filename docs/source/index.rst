@@ -70,10 +70,10 @@ Example Outputs from Queries
 - Standard Search Output:
 
   ```output
-  INFO:root:1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
-  INFO:root:--------------------------------------------------
-  INFO:root:Title: Wiles's proof of Fermat's Last Theorem
-  INFO:root:Text:
+  1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
+  --------------------------------------------------
+  Title: Wiles's proof of Fermat's Last Theorem
+  Text:
   is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves. Together with Ribet's theorem, it provides a proof for Fermat's Last Theorem. Both Fermat's Last Theorem and the modularity theorem were almost universally considered inaccessible to proof by contemporaneous mathematicians, meaning that they were believed to be impossible to prove using current knowledge.
   ...
   ```
