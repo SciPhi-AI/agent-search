@@ -16,11 +16,14 @@ logger = logging.getLogger(__name__)
 
 EMBEDDING_VEC_SIZE = 768
 
+
 def create_collection(qclient, collection_name):
     qclient.delete_collection(collection_name)
     qclient.create_collection(
         collection_name=collection_name,
-        vectors_config=models.VectorParams(size=768, distance=models.Distance.COSINE),
+        vectors_config=models.VectorParams(
+            size=768, distance=models.Distance.COSINE
+        ),
         quantization_config=models.ScalarQuantization(
             scalar=models.ScalarQuantizationConfig(
                 type=models.ScalarType.INT8,
@@ -29,6 +32,7 @@ def create_collection(qclient, collection_name):
             ),
         ),
     )
+
 
 def process_rows(rows, output_queue):
     """Process the rows into qdrant point objects."""
@@ -181,6 +185,9 @@ class PopulateQdrant:
         # Wait for all processes to finish
         for proc in processes:
             proc.join()
+
+        # send termination signal
+        qdrant_queue.put(None)
 
         cur.close()
         conn.close()

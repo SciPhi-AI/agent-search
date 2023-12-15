@@ -4,7 +4,6 @@ import os
 from typing import List
 
 import numpy as np
-import pandas as pd
 from qdrant_client import QdrantClient
 from transformers import AutoModel
 
@@ -81,15 +80,17 @@ class WebSearchEngine:
                         "Must have a pagerank file at the config specified path when using pagerank_rerank_module"
                     )
 
-            # Reading the CSV data using pandas
-            df = pd.read_csv(pagerank_file_path)
-            self.domain_to_rank_map = dict(
-                zip(df["Domain"], df["Open Page Rank"])
-            )
-            self.pagerank_rerank_module = True
             self.pagerank_importance = float(
                 self.config["pagerank_importance"]
             )
+            self.domain_to_rank_map = {}
+
+            with open(pagerank_file_path, newline="") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    domain = row["Domain"]
+                    rank = row["Open Page Rank"]
+                    self.domain_to_rank_map[domain] = rank
 
     def get_query_vector(self, query: str):
         """Gets the query vector for the given query"""
@@ -141,7 +142,14 @@ class WebSearchEngine:
 
         # Iterate over each result to find the most similar text chunk
         for result in results:
-            (url, title, metadata, dataset, text_chunks_str, embeddings_binary) = result
+            (
+                url,
+                title,
+                metadata,
+                dataset,
+                text_chunks_str,
+                embeddings_binary,
+            ) = result
             # deserialize the embeddings and text chunks
             embeddings = np.frombuffer(
                 embeddings_binary, dtype=np.float32

@@ -8,7 +8,7 @@ from agent_search.core import SERPClient
 logger = logging.getLogger(__name__)
 
 
-class QueryWrapper:
+class RAGWraper:
     """A wrapper class to run queries on the SERPClient"""
 
     def __init__(self):
@@ -25,6 +25,7 @@ class QueryWrapper:
 
         try:
             results = client.search(query)
+            print("results = ", results)
             for i, result in enumerate(results):
                 logging.info(
                     f"{i}. \033[94mURL: {result.url}\033[0m (Score: \033[95m{result.score:.2f}\033[0m)"

@@ -27,17 +27,20 @@ pip install agent-search
 SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_query query --query="What is Fermat's last theorem?"
 ```
 
-Register first for a free API key at [AgentSearch Signup](https://www.sciphi.ai/). For self-hosting, follow the steps below.
+Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
+
+---
+
 
 ### Local Setup and Initialization
+
+For self-hosting, follow the steps below.
 
 #### Prerequisites
 
 Ensure Docker and Postgres are installed on your system. 
 - [Download Docker here](https://www.docker.com/).
 - [Download Postgres here](https://www.postgresql.org/download/).
-
----
 
 This addition provides users with direct links to download both Docker and Postgres, ensuring they have the necessary tools to proceed with the AgentSearch setup.
 #### Steps:
