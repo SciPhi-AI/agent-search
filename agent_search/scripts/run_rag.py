@@ -46,7 +46,7 @@ class RagDemo:
 
         # LLM Provider Settings
         llm_interface = LLMInterfaceManager.get_interface_from_args(
-            LLMProviderName("openai"),
+            LLMProviderName(llm_provider_name),
         )
 
         generation_config = GenerationConfig(

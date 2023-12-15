@@ -2,13 +2,12 @@
 
 ![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/56268e41-130f-4d2f-ba22-b565f7642713)
 
-AgentSearch is a powerful new tool designed for data scientists, developers, and researchers, allowing you to operate a webscale search engine locally. It's ideal for both Large Language Models (LLMs) and human users, providing access to over one billion high-quality embeddings from diverse sources like Creative Commons, Arxiv, Wikipedia, and Project Gutenberg.
+AgentSearch is a powerful agent-first search engine which enables you to run a webscale search engine locally or to connect via remote API. It's ideal for both Large Language Models (LLMs) and human users, providing access to over one billion high-quality embeddings from diverse sources like Creative Commons, Arxiv, Wikipedia, and Project Gutenberg.
 
 ## Features of AgentSearch
 
-- **Gated Access**: Ensures controlled and secure access to the search engine, maintaining data integrity and privacy.
-- **Offline Support**: Facilitates operation in a completely offline environment.
 - **Customizable**: Allows uploading of local data or tailoring of provided datasets to meet specific needs.
+- **Offline Support**: Facilitates operation in a completely offline environment. Download the full [dataset here](https://huggingface.co/datasets/SciPhi/AgentSearch-V1).
 - **API Endpoint**: Offers fully managed access through a dedicated API for seamless integration into various workflows.
 
 ## Quickstart Guide for AgentSearch
@@ -24,7 +23,8 @@ pip install agent-search
 - To perform a search with the hosted AgentSearch API:
 
 ```shell
-SCIPHI_API_KEY=$SCIPHI_API_KEY python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
+export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
 ```
 
 Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
@@ -34,8 +34,7 @@ Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For fur
 --------------------------------------------------
 Title: Wiles's proof of Fermat's Last Theorem
 Text:
-is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves. Together with Ribet's theorem, it provides a proof for Fermat's Last Theorem. Both Fermat's Last Theorem and the modularity theorem were almost universally considered inaccessible to proof by contemporaneous mathematicians, meaning that they were believed to be impossible to prove using current knowledge.
-...
+is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves ... Response Continues ...
 ```
 
 ### Generate a RAG response
@@ -43,11 +42,12 @@ is a proof by British mathematician Andrew Wiles of a special case of the modula
 - To generate a rag response with the hosted AgentSearch API:
 
 ```shell
-SCIPHI_API_KEY=$SCIPHI_API_KEY OPENAI_API_KEY=$OPENAI_API_KEY python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
+export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+export OPENAI_API_KEY=MY_OPENAI_KEY
+python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 ```
 
 ```output
-...
 Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
 ```
 
@@ -55,6 +55,10 @@ Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For fur
 
 ---
 
+### Community & Support
+
+- Engage with our vibrant community on [Discord](https://discord.gg/j9GxfbxqAe).
+- For tailored inquiries or feedback, please [email us](mailto:owen@sciphi.ai).
 
 ### Local Setup and Initialization
 
@@ -98,7 +102,7 @@ This addition provides users with direct links to download both Docker and Postg
      ```shell
      python -m agent_search.scripts.populate_qdrant_from_postgres run --delete_existing=True
      ```
-   - This step prepares the qdrant vector database as described in `config.ini`. For direct installation assistance, contact [our team](mailto:owen@sciphi.ai).
+   - This step prepares the qdrant vector database with the parameters defined in the `config.ini`. For direct installation assistance, contact [our team](mailto:owen@sciphi.ai).
 
 5. **Run the Server**:
    - Launch the AgentSearch server:
@@ -112,11 +116,3 @@ This addition provides users with direct links to download both Docker and Postg
 - Replace `query` in the run command with your search query.
 - Check back soon for our User Guide. 
 <!-- [User Guide](link-to-user-guide). -->
-
-## Troubleshooting and FAQs
-
-Encounter an issue? Check our [FAQs](link-to-faqs) or visit our [community forum](link-to-forum) for support.
-
-## Version Information
-
-Currently running AgentSearch version: 0.0.2.
