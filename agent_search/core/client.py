@@ -45,9 +45,10 @@ class SERPClient:
     def search(
         self,
         query: str,
-        num_step0_results: int = 100,
-        num_step1_results: int = 25,
-        num_step2_results: int = 10,
+        limit_broad_results: int = 1_000,
+        limit_deduped_url_results: int = 100,
+        limit_hierarchical_url_results: int = 25,
+        limit_final_pagerank_results: int = 10,
     ) -> List[SERPResult]:
         headers = {
             "Authorization": f"Bearer {self.auth_token}",
@@ -55,14 +56,15 @@ class SERPClient:
         }
         payload = {
             "query": query,
-            "num_step0_results": num_step0_results,
-            "num_step1_results": num_step1_results,
-            "num_step2_results": num_step2_results,
+            "limit_broad_results": limit_broad_results,
+            "limit_deduped_url_results": limit_deduped_url_results,
+            "limit_hierarchical_url_results": limit_hierarchical_url_results,
+            "limit_final_pagerank_results": limit_final_pagerank_results,
         }
         response = requests.post(
             f"{self.api_base}/search", headers=headers, json=payload
         )
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
 
-        results = response.json()
+        results = response.json()["results"]
         return [SERPResult.from_dict(result) for result in results]

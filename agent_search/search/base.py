@@ -1,58 +1,79 @@
+import csv
 import json
 import logging
 import os
 from typing import List
 
 import numpy as np
-import pandas as pd
 from qdrant_client import QdrantClient
 from transformers import AutoModel
 
 from agent_search.core import SERPResult
-from agent_search.core.utils import cosine_similarity, load_config
+from agent_search.core.utils import (
+    cosine_similarity,
+    get_data_path,
+    load_config,
+)
 
 logger = logging.getLogger(__name__)
 
 
-class OpenWebSearch:
+class WebSearchEngine:
     """A simple search client for the OpenSearch collection"""
 
     def __init__(
         self,
     ):
         try:
-            import sqlite3
-        except:
+            import psycopg2
+        except ImportError as e:
             raise ImportError(
-                "The sqlite3 package is not installed. Please install it with `pip install sqlite3`"
+                f"Error {e} while imoprting psycopg2. Please install it with `pip install psycopg2` to run an WebSearchEngine instance."
             )
 
-        # Load the configuration
+        # Load config
         self.config = load_config()["agent_search"]
+
+        # Load Postgres
+        logger.info(
+            f"Connecting to Postgres database at: {self.config['postgres_db']}."
+        )
+        self.conn = psycopg2.connect(
+            dbname=self.config["postgres_db"],
+            user=self.config["postgres_user"],
+            password=self.config["postgres_password"],
+            host=self.config["postgres_host"],
+            options="-c client_encoding=UTF8",
+        )
+        self.cur = self.conn.cursor()
+
+        # Load qdrant client
         logger.info(
             f"Connecting to collection: {self.config['qdrant_collection_name']}"
         )
-        self.collection_name = self.config["qdrant_collection_name"]
+        self.qdrant_collection_name = self.config["qdrant_collection_name"]
         self.client = QdrantClient(
-            self.config["qdrant_client_host"],
-            grpc_port=self.config["qdrant_client_grpc_port"],
+            self.config["qdrant_host"],
+            grpc_port=self.config["qdrant_grpc_port"],
             prefer_grpc=True,
         )
+        if not self.client.get_collection(self.qdrant_collection_name):
+            raise ValueError(
+                f"Must have a Qdrant collection with the name {self.qdrant_collection_name}."
+            )
 
+        # Load embedding model
         self.embedding_model = AutoModel.from_pretrained(
             self.config["embedding_model_name"], trust_remote_code=True
         )
 
-        self.sqlite_table_name = self.config["sqlite_table_name"]
-
         self.pagerank_rerank_module = self.config["pagerank_rerank_module"]
         pagerank_file_path = self.config["pagerank_file_path"]
-
         if self.pagerank_rerank_module:
             if not pagerank_file_path:
                 # Simulating reading from a CSV file
                 pagerank_file_path = os.path.join(
-                    os.path.dirname(__file__), "..", "data", "domain_ranks.csv"
+                    get_data_path(), "domain_ranks.csv"
                 )
 
                 if not os.path.exists(pagerank_file_path):
@@ -60,15 +81,17 @@ class OpenWebSearch:
                         "Must have a pagerank file at the config specified path when using pagerank_rerank_module"
                     )
 
-            # Reading the CSV data using pandas
-            df = pd.read_csv(pagerank_file_path)
-            self.domain_to_rank_map = dict(
-                zip(df["Domain"], df["Open Page Rank"])
-            )
-            self.pagerank_rerank_module = True
             self.pagerank_importance = float(
                 self.config["pagerank_importance"]
             )
+            self.domain_to_rank_map = {}
+
+            with open(pagerank_file_path, newline="") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    domain = row["Domain"]
+                    rank = float(row["Open Page Rank"])
+                    self.domain_to_rank_map[domain] = rank
 
     def get_query_vector(self, query: str):
         """Gets the query vector for the given query"""
@@ -84,7 +107,7 @@ class OpenWebSearch:
         """Searches the collection for the given query and returns the top 'limit' results"""
 
         points = self.client.search(
-            collection_name=self.collection_name,
+            collection_name=self.qdrant_collection_name,
             query_vector=query_vector,
             limit=limit,
         )
@@ -107,19 +130,13 @@ class OpenWebSearch:
         limit: int = 100,
     ) -> List[SERPResult]:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
-        import sqlite3
-
-        conn = sqlite3.connect(self.config["sqlite_db_rel_path"])
-        cur = conn.cursor()
-
         # SQL query to fetch the entries for the URLs
         # Assuming 'urls' is a list of URL strings
-        placeholders = ", ".join("?" * len(urls))
-        query = f"SELECT * FROM {self.sqlite_table_name} WHERE url IN ({placeholders})"
+        query = f"SELECT url, title, metadata, dataset, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url IN %s"
 
         # Fetch all results
-        cur.execute(query, tuple(urls))
-        results = cur.fetchall()
+        self.cur.execute(query, (tuple(urls),))
+        results = self.cur.fetchall()
 
         # List to store the results along with their similarity scores
         similarity_results = []
@@ -127,16 +144,18 @@ class OpenWebSearch:
         # Iterate over each result to find the most similar text chunk
         for result in results:
             (
-                _,
                 url,
                 title,
                 metadata,
                 dataset,
                 text_chunks_str,
-                embeddings_str,
+                embeddings_binary,
             ) = result
+            # deserialize the embeddings and text chunks
+            embeddings = np.frombuffer(
+                embeddings_binary, dtype=np.float32
+            ).reshape(-1, 768)
             text_chunks = json.loads(text_chunks_str)
-            embeddings = json.loads(embeddings_str)
             max_similarity = -1
             most_similar_chunk = None
 
@@ -163,7 +182,6 @@ class OpenWebSearch:
 
         # Sort the results based on similarity score in descending order
         similarity_results.sort(key=lambda x: x.score, reverse=True)
-        conn.close()
         return similarity_results[:limit]
 
     def pagerank_reranking(
@@ -174,7 +192,7 @@ class OpenWebSearch:
         """Reranks the results based on the PageRank score of the domain"""
         if not self.pagerank_rerank_module:
             raise Exception(
-                "PageRank reranking module is not enabled. Please set pagerank_rerank_module=True while initializing the OpenWebSearch client."
+                "PageRank reranking module is not enabled. Please set pagerank_rerank_module=True while initializing the WebSearchEngine client."
             )
         # List to store the results along with their PageRank scores
         pagerank_results = []

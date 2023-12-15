@@ -1,7 +1,9 @@
 import configparser
+import os
 from typing import List, Optional
 
 import numpy as np
+
 from agent_search.core import SERPResult
 
 
@@ -41,8 +43,19 @@ def cosine_similarity(v1: np.ndarray, v2: np.ndarray) -> float:
     return dot_product / (norm_v1 * norm_v2)
 
 
-def load_config() -> configparser.ConfigParser:
+def get_data_path() -> str:
+    return os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "..",
+        "data",
+    )
+
+
+def load_config(config_dir: Optional[str] = None) -> configparser.ConfigParser:
     """Load the configuration file."""
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    if not config_dir:
+        config_dir = get_data_path()
+    config.read(os.path.join(config_dir, "config.ini"))
     return config

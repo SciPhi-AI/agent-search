@@ -1,5 +1,6 @@
 # local data
 data/
+playground/
 **/__pycache__
 dist/
 test/

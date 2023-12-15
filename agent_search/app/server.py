@@ -3,8 +3,9 @@ import time
 from typing import Optional
 
 from pydantic import BaseModel
+
 from agent_search.core.utils import load_config, select_top_urls
-from agent_search.search import OpenWebSearch
+from agent_search.search import WebSearchEngine
 
 # Attempt to import uvicorn and FastAPI
 try:
@@ -12,7 +13,7 @@ try:
     from fastapi import FastAPI, HTTPException
 except ImportError as e:
     raise ImportError(
-        "Required packages not installed: uvicorn and FastAPI. Please install them before running the server."
+        f"Error: {e}, Note - both uvicorn and FastAPI are required to run the server."
     )
 
 
@@ -34,7 +35,7 @@ def timed_fn(fn):
 
 class SearchServer:
     def __init__(self):
-        self.client = OpenWebSearch()
+        self.client = WebSearchEngine()
 
     def run(
         self,
@@ -45,7 +46,7 @@ class SearchServer:
         limit_final_pagerank_results=10,
         url_contains_filter=None,
     ):
-        """Run a search query using the OpenWebSearch client"""
+        """Run a search query using the WebSearchEngine client"""
         query_vector = self.client.get_query_vector(query)
         broad_results = timed_fn(self.client.similarity_search)(
             query_vector=query_vector, limit=limit_broad_results
@@ -84,7 +85,7 @@ class SearchServer:
                 self.client.pagerank_reranking
             )(hierarchical_url_results)[:limit_final_pagerank_results]
             logger.debug(
-                "Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
+                f"Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
             )
 
             # Print or process the sorted results

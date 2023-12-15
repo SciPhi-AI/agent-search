@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "agent_search"
-version = "0.0.1"
+version = "0.0.2"
 description = "LocalSearch: An open source framework and dataset for webscale local search."
 authors = ["Owen Colegrove <owen@sciphi.ai>"]
 license = "Apache-2.0"
@@ -18,15 +18,14 @@ python = ">=3.9,<3.12"
 configparser = "^5.0.0"
 fire = "^0.5.0"
 numpy = "^1.25.2"
-pandas = "^2.1.2"
 pydantic = "^1.10.13"
 qdrant_client = "^1.7.0"
 requests = "^2.31.0"
-pysqlite3 = "0.5.2"
 transformers = "^4.33.1"
+agent_search = "^0.0.2"
 
 # Additional Requirements
-# torch, fastapi, uvicorn, sqlite3
+# torch, fastapi, uvicorn, psycogp2
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

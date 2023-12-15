@@ -8,8 +8,6 @@ Endpoint Overview
 
 1. **Search**: This endpoint allows you to fetch related search results for a given query. The results are powered by the AgentSearch framework and dataset.
 
-2. **OpenAI Formatted LLM Request (v1)**: AgentSearch models are served via an API that is compatible with the OpenAI API.
-
 Detailed Endpoint Descriptions
 ------------------------------
 
@@ -62,48 +60,6 @@ A list SERPResult objects. Each object contains the following fields:
     },
     ...
    ]
-
-AgentSearch Completion v1 Endpoints
-~~~~~~~~~~~~~~~~~~~
-
-AgentSearch adheres to the API specification of OpenAI's API, allowing compatibility with any application designed for the OpenAI API. Below is an example curl command:
-
-**Example**:
-
-.. code-block:: bash
-
-    curl https://api.sciphi.ai/v1/completions \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $SCIPHI_API_KEY" \
-      -d '{
-         "model": "SciPhi/SciPhi-Self-RAG-Mistral-7B-32k",
-         "prompt": "Say this is a test.",
-         "temperature": 0.2
-       }'
-
-**Response**:
-
-.. code-block:: json
-
-    {
-        "id":"cmpl-f03f53c15a174ffe89bdfc83507de7a9",
-        "object":"text_completion",
-        "created":1698730137,
-        "model":"SciPhi/SciPhi-Self-RAG-Mistral-7B-32k",
-        "choices":[
-            {
-                "index":0,
-                "text":"This is a test.",
-                "logprobs":null,
-                "finish_reason":"length"
-            }
-        ],
-        "usage": {
-            "prompt_tokens":7,
-            "total_tokens":15,
-            "completion_tokens":8
-        }
-    }
 
 API Key and Signup
 ------------------
