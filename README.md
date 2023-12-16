@@ -64,13 +64,11 @@ Resulting output:
 Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
 ```
 
-To run the above, register for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
-
 ---
 
 ### Community & Support
 
-- Engage with our vibrant community on [Discord](https://discord.gg/j9GxfbxqAe).
+- Engage with the community on [Discord](https://discord.gg/j9GxfbxqAe).
 - For tailored inquiries or feedback, please [email us](mailto:owen@sciphi.ai).
 
 ### Local Setup and Initialization
@@ -83,7 +81,6 @@ Ensure Docker and Postgres are installed on your system.
 - [Download Docker here](https://www.docker.com/).
 - [Download Postgres here](https://www.postgresql.org/download/).
 
-This addition provides users with direct links to download both Docker and Postgres, ensuring they have the necessary tools to proceed with the AgentSearch setup.
 #### Steps:
 
 1. **Launch Postgres Database**:
