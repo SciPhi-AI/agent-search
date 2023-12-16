@@ -131,6 +131,10 @@ def run_search(query: SearchQuery):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/health")
+def health_check():
+    """Health check endpoint"""
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     config = load_config()["server"]
