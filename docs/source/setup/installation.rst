@@ -1,4 +1,4 @@
-.. _sciphi_installation:
+.. _agent_search_installation:
 
 Installation
 =====================================================

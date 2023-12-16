@@ -20,14 +20,17 @@ pip install agent-search
 
 ### Perform a Search
 
-- To perform a search with the hosted AgentSearch API:
+- To perform a search with the hosted AgentSearch API, follow these steps:
+
+1. Register for a free API key at [SciPhi](https://www.sciphi.ai/).
+2. Use the following command to run a search query:
 
 ```shell
-export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
-python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
+   export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+   python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
 ```
 
-Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
+This will output results like the following:
 
 ```output
 1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
@@ -37,21 +40,31 @@ Text:
 is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves ... Response Continues ...
 ```
 
+For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
+
 ### Generate a RAG response
 
 - To generate a rag response with the hosted AgentSearch API:
 
 ```shell
+# Install SciPhi's synthesizer package -
+pip install sciphi-synthesizer
+
+# Setup environment
 export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
 export OPENAI_API_KEY=MY_OPENAI_KEY
+
+# Run the included rag demo
 python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 ```
+
+Resulting output:
 
 ```output
 Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
 ```
 
-Register first for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
+To run the above, register for a free API key with [SciPhi](https://www.sciphi.ai/). For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
 
 ---
 
@@ -86,7 +99,7 @@ This addition provides users with direct links to download both Docker and Postg
      ```shell
      python -m agent_search.scripts.populate_postgres_from_hf run
      ```
-   - This script populates the database defined in `config.ini`, adaptable to custom datasets. For assistance with the 4TB postgres database installation, contact [our team](mailto:owen@sciphi.ai).
+   - This script populates a postgres database with the parameters from `config.ini`, adaptable to custom datasets. For help directly istalling the full 4TB postgres database, contact [our team](mailto:owen@sciphi.ai).
 
 3. **Start Qdrant Service with Docker**:
    - Run the Qdrant service in Docker:
@@ -102,7 +115,7 @@ This addition provides users with direct links to download both Docker and Postg
      ```shell
      python -m agent_search.scripts.populate_qdrant_from_postgres run --delete_existing=True
      ```
-   - This step prepares the qdrant vector database with the parameters defined in the `config.ini`. For direct installation assistance, contact [our team](mailto:owen@sciphi.ai).
+   - This step prepares a qdrant database with the parameters from `config.ini`. For direct installation assistance, contact [our team](mailto:owen@sciphi.ai).
 
 5. **Run the Server**:
    - Launch the AgentSearch server:
