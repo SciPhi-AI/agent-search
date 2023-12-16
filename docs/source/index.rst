@@ -69,6 +69,7 @@ Example Outputs from Queries
 - Standard Search Output:
 
 .. code-block:: none
+
    1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
    --------------------------------------------------
    Title: Wiles's proof of Fermat's Last Theorem
@@ -78,6 +79,7 @@ Example Outputs from Queries
 - RAG Response Output:
 
 .. code-block:: none
+
   Fermat's Last Theorem was proven by British mathematician Andrew Wiles in 1994 (Wikipedia). Wiles's proof was based ...
 
 Local Setup and Initialization
@@ -132,14 +134,14 @@ Documentation
 -------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Getting Started
 
    setup/installation
    setup/quick_start
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: API
 
    api/main
