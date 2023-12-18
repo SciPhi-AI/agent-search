@@ -18,7 +18,7 @@ Installing AgentSearch is as simple as using pip:
 
 .. code-block:: console
 
-   $ pip install agent-search
+   pip install agent-search
 
 Development Setup
 -----------------
@@ -27,9 +27,9 @@ To set up AgentSearch for development:
 
 .. code-block:: console
 
-   $ git clone https://github.com/SciPhi-AI/agent-search.git
-   $ cd agent-search
-   $ pip3 install -e .
+   git clone https://github.com/SciPhi-AI/agent-search.git
+   cd agent-search
+   pip3 install -e .
 
 Licensing and Acknowledgment
 ---------------------------
