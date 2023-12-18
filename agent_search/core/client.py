@@ -65,6 +65,5 @@ class SERPClient:
             f"{self.api_base}/search", headers=headers, json=payload
         )
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
-
-        results = response.json()["results"]
+        results = response.json()
         return [SERPResult.from_dict(result) for result in results]

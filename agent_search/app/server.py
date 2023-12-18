@@ -42,8 +42,8 @@ class SearchServer:
         query="What is a lagrangian?",
         limit_broad_results=1_000,
         limit_deduped_url_results=50,
-        limit_hierarchical_url_results=20,
-        limit_final_pagerank_results=10,
+        limit_hierarchical_url_results=50,
+        limit_final_pagerank_results=20,
         url_contains_filter=None,
     ):
         """Run a search query using the WebSearchEngine client"""

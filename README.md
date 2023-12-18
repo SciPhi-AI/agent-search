@@ -52,9 +52,11 @@ pip install sciphi-synthesizer
 
 # Setup environment
 export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
-export OPENAI_API_KEY=MY_OPENAI_KEY
+# Use the SciPhi `SearchAgent` for LLM RAG w/ AgentSearch
+python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?"
 
-# Run the included rag demo
+export OPENAI_API_KEY=MY_OPENAI_KEY
+# Use OpenAI `gpt-3.5-turbo` for LLM generation
 python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 ```
 
