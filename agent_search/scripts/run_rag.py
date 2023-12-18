@@ -1,5 +1,6 @@
 import fire
 
+# Note, it is understood that the prompt has an issue with redundancy. This will be addressed shortly.
 PROMPT = """
 ### Instruction:
 
@@ -21,6 +22,8 @@ Your task is to write a response to the given prompt. If the prompt is clearly a
 ### Response:
 
 """
+
+
 class RagDemo:
     """A demonstration of agent-search + synthesizer RAG pipeline."""
 
@@ -59,8 +62,8 @@ class RagDemo:
         rag_interface = RAGInterfaceManager.get_interface_from_args(
             RAGProviderName(rag_provider_name),
             api_base=rag_api_base,
-            limit_hierarchical_url_results=rag_limit_hierarchical_url_results,
-            limit_final_pagerank_results=rag_limit_final_pagerank_results,
+            # limit_hierarchical_url_results=rag_limit_hierarchical_url_results,
+            # limit_final_pagerank_results=rag_limit_final_pagerank_results,
         )
         rag_context = rag_interface.get_rag_context(query)
 

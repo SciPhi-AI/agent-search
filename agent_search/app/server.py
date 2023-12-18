@@ -116,10 +116,31 @@ app = FastAPI()
 search_runner = SearchServer()
 
 
+def check_limits(query: SearchQuery):
+    """Check if the limit parameters exceed three times their default values"""
+    if query.limit_broad_results > 3 * 1_000:
+        raise ValueError(
+            "limit_broad_results exceeds 3 times its default value"
+        )
+    if query.limit_deduped_url_results > 3 * 100:
+        raise ValueError(
+            "limit_deduped_url_results exceeds 3 times its default value"
+        )
+    if query.limit_hierarchical_url_results > 3 * 25:
+        raise ValueError(
+            "limit_hierarchical_url_results exceeds 3 times its default value"
+        )
+    if query.limit_final_pagerank_results > 3 * 10:
+        raise ValueError(
+            "limit_final_pagerank_results exceeds 3 times its default value"
+        )
+
+
 @app.post("/search")
 def run_search(query: SearchQuery):
     """Run a search query"""
     try:
+        check_limits(query)
         results = search_runner.run(
             query=query.query,
             limit_broad_results=query.limit_broad_results,
@@ -128,13 +149,17 @@ def run_search(query: SearchQuery):
             limit_final_pagerank_results=query.limit_final_pagerank_results,
         )
         return {"results": results}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/health")
 def health_check():
     """Health check endpoint"""
     return {"status": "ok"}
+
 
 if __name__ == "__main__":
     config = load_config()["server"]

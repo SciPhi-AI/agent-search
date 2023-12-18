@@ -18,7 +18,6 @@ EMBEDDING_VEC_SIZE = 768
 
 
 def create_collection(qclient, collection_name):
-    qclient.delete_collection(collection_name)
     qclient.create_collection(
         collection_name=collection_name,
         vectors_config=models.VectorParams(
