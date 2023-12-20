@@ -133,7 +133,6 @@ class WebSearchEngine:
         # SQL query to fetch the entries for the URLs
         # Assuming 'urls' is a list of URL strings
         query = f"SELECT url, title, metadata, dataset, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url IN %s"
-
         # Fetch all results
         self.cur.execute(query, (tuple(urls),))
         results = self.cur.fetchall()
@@ -156,7 +155,7 @@ class WebSearchEngine:
                 embeddings_binary, dtype=np.float32
             ).reshape(-1, 768)
             text_chunks = json.loads(text_chunks_str)
-            max_similarity = -1
+            max_similarity = -1e9
             most_similar_chunk = None
 
             # Iterate over each embedding to find the one with maximum cosine similarity
