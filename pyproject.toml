@@ -23,6 +23,7 @@ qdrant_client = "^1.7.0"
 requests = "^2.31.0"
 sciphi_synthesizer = "1.0.3"
 transformers = "^4.33.1"
+openai = "0.28"
 
 # Additional Requirements
 # torch, fastapi, uvicorn, psycogp2
