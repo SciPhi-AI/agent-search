@@ -47,12 +47,16 @@ class SearchServer:
         url_contains_filter=None,
     ):
         """Run a search query using the WebSearchEngine client"""
+        logger.debug(
+            f"Step 0: Querying {query}"
+        )
+        
         query_vector = self.client.get_query_vector(query)
         broad_results = timed_fn(self.client.similarity_search)(
             query_vector=query_vector, limit=limit_broad_results
         )
         logger.debug(
-            f"Step 0: Broad similarity search, {len(broad_results)} results"
+            f"Step 0: Broad similarity search, {len(broad_results)} results for query {query}."
         )
 
         if not url_contains_filter:
@@ -65,7 +69,7 @@ class SearchServer:
         )
 
         logger.debug(
-            f"Step 1: Unique URL Filtration, {len(deduped_url_results)} results"
+            f"Step 1: Unique URL Filtration, {len(deduped_url_results)} results for query {query}."
         )
 
         hierarchical_url_results = timed_fn(
@@ -77,7 +81,7 @@ class SearchServer:
         )
 
         logger.debug(
-            f"Step 2: Reranking using hierarchical similarity search, {len(hierarchical_url_results)} results returned"
+            f"Step 2: Reranking using hierarchical similarity search, {len(hierarchical_url_results)} results returned for query {query}."
         )
 
         try:
@@ -85,15 +89,9 @@ class SearchServer:
                 self.client.pagerank_reranking
             )(hierarchical_url_results)[:limit_final_pagerank_results]
             logger.debug(
-                f"Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned"
+                f"Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned for query {query}."
             )
 
-            # Print or process the sorted results
-            for serp_result in pagerank_reranked_results:
-                logger.debug(
-                    f"URL: {serp_result.url}, Similarity: {serp_result.score:.4f}:\nTitle: {serp_result.title}\nText:\n{serp_result.text}"
-                )
-                logger.debug("-" * 100)
         except Exception as e:
             logger.error(
                 f"An error occurred while reranking using pagerank: {e}"
