@@ -30,7 +30,9 @@ class SERPResult:
 
 class SERPClient:
     def __init__(
-        self, api_base: Optional[str] = None, auth_token: Optional[str] = None,
+        self,
+        api_base: Optional[str] = None,
+        auth_token: Optional[str] = None,
     ):
         self.api_base = (
             api_base or os.getenv("SCIPHI_API_BASE") or "https://api.sciphi.ai"
@@ -50,7 +52,6 @@ class SERPClient:
         limit_hierarchical_url_results: int = 25,
         limit_final_pagerank_results: int = 10,
     ) -> List[SERPResult]:
-
         headers = {
             "Authorization": f"Bearer {self.auth_token}",
             "Content-Type": "application/json",
@@ -66,7 +67,7 @@ class SERPClient:
             f"{self.api_base}/search", headers=headers, json=payload
         )
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
-        results = response.json()["results"]
+        results = response.json()
         serp_results = [SERPResult.from_dict(result) for result in results]
 
         return serp_results
