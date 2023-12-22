@@ -34,6 +34,7 @@ A list SERPResult objects. Each object contains the following fields:
 **Example**:
 
 .. code-block:: bash
+
    export SCIPHI_API_KEY=${MY_API_KEY}
 
    curl -X POST https://api.sciphi.ai/search \
@@ -71,6 +72,7 @@ SciPhi adheres to the API specification of OpenAI's API, allowing compatibility 
 **Example**:
 
 .. code-block:: bash
+    
     export SEARCH_CONTEXT="N/A"
     export PREFIX='{"summary":'
 
