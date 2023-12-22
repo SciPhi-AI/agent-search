@@ -86,6 +86,6 @@ Additional Notes
 Documentation Links
 -------------------
 
-- `Installation Guide <setup/installation>`_
-- `Quick Start Tutorial <setup/quick_start>`_
-- `API Documentation <api/main>`_
+- `Installation Guide <installation>`_ (adjust if it's in a different location)
+- `Quick Start Tutorial <quick_start>`_
+- `API Documentation <../api/main>`_
