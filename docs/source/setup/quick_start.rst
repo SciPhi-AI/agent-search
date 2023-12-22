@@ -41,8 +41,15 @@ Using AgentSearch
    .. code-block:: shell
 
       export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+      # Use the SciPhi `SearchAgent` for LLM RAG w/ AgentSearch
+      python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?"
+      # ... Output ...
+      # {"summary": "\nFermat's Last Theorem is a significant result in number theory, stating that for any natural number n greater than 2, there are no solutions to the equation \\(a^n + b^n = c^n\\) where \\(a\\), \\(b\\), and \\(c\\) are positive integers [5]. The theorem was first proposed by Pierre de Fermat in the margins of his copy of Diophantus's \"Arithmetica\" in the 17th century, but it remained unproved for over three centuries [8]. The first case of the theorem to be proven was by Fermat himself for \\(n = 4\\), using a method of infinite descent [9]. Leonhard Euler later provided a proof for the case \\(n = 3\\), although his initial proof contained errors that were later corrected [9].\n\nThe theorem was finally proven in its entirety in 1995 by British mathematician Andrew Wiles, using sophisticated mathematical tools and techniques that were not available during Fermat's lifetime [10]. This breakthrough marked the end of a long period of mathematical speculation and the resolution of a major historical puzzle in mathematics [10]. The proof of Fermat's Last Theorem has been hailed as one of the most significant achievements in the history of mathematics, demonstrating the power of modern mathematical methods and the persistence of mathematical inquiry over centuries [10].\n\n", "other_queries": ["Details of Fermat's Last Theorem proof", "Historical impact of Fermat's Last Theorem", "Contributions of Andrew Wiles to mathematics", "Techniques used in the proof of Fermat's Last Theorem", "Evolution of number theory post-Fermat's Last Theorem"]}</s>
+
+      export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
       export OPENAI_API_KEY=MY_OPENAI_KEY
-      python -m agent_search.scripts.run_rag run --query="Your Search Query" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
+      # Use OpenAI `gpt-3.5-turbo` for LLM generation
+      python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 
 Local Setup and Initialization
 ------------------------------
@@ -86,6 +93,6 @@ Additional Notes
 Documentation Links
 -------------------
 
-- `Installation Guide <installation>`_ (adjust if it's in a different location)
-- `Quick Start Tutorial <quick_start>`_
-- `API Documentation <../api/main>`_
+- `Installation Guide <installation.html>`_ 
+- `Quick Start Tutorial <quick_start.html>`_
+- `API Documentation <../api/main.html>`_
