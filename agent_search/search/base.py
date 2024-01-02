@@ -3,6 +3,7 @@ import json
 import logging
 import os
 from typing import List
+import psycopg2
 
 import numpy as np
 from qdrant_client import QdrantClient
@@ -38,14 +39,6 @@ class WebSearchEngine:
         logger.info(
             f"Connecting to Postgres database at: {self.config['postgres_db']}."
         )
-        self.conn = psycopg2.connect(
-            dbname=self.config["postgres_db"],
-            user=self.config["postgres_user"],
-            password=self.config["postgres_password"],
-            host=self.config["postgres_host"],
-            options="-c client_encoding=UTF8",
-        )
-        self.cur = self.conn.cursor()
 
         # Load qdrant client
         logger.info(
@@ -123,6 +116,31 @@ class WebSearchEngine:
             for point in points
         ]
 
+    # Example of batch processing
+    def execute_batch_query(self, urls, batch_size=20):
+        results = []
+        try:
+            with psycopg2.connect(
+                dbname=self.config["postgres_db"],
+                user=self.config["postgres_user"],
+                password=self.config["postgres_password"],
+                host=self.config["postgres_host"],
+                options="-c client_encoding=UTF8",
+            ) as conn:
+                with conn.cursor() as cur:
+                    for i in range(0, len(urls), batch_size):
+                        batch_urls = urls[i:i + batch_size]
+                        logger.info(f'Executing batch query for URLs: {batch_urls[0:2]}')
+                        query = f"SELECT url, title, metadata, dataset, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url = ANY(%s)"
+                        cur.execute(query, (batch_urls,))
+                        batch_results = cur.fetchall()
+                        results.extend(batch_results)
+        except psycopg2.DatabaseError as e:
+            logger.error(f"Database error: {e}")
+        except Exception as e:
+            logger.error(f"Error in execute_batch_query: {e}")
+        return results
+
     def hierarchical_similarity_reranking(
         self,
         query_vector: np.ndarray,
@@ -130,13 +148,7 @@ class WebSearchEngine:
         limit: int = 100,
     ) -> List[SERPResult]:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
-        # SQL query to fetch the entries for the URLs
-        # Assuming 'urls' is a list of URL strings
-        query = f"SELECT url, title, metadata, dataset, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url IN %s"
-        # Fetch all results
-        self.cur.execute(query, (tuple(urls),))
-        results = self.cur.fetchall()
-
+        results = self.execute_batch_query(urls)
         # List to store the results along with their similarity scores
         similarity_results = []
 
