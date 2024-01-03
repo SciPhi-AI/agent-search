@@ -100,20 +100,20 @@ Below are some example uses of the SciPhi API client.
 
     # Using Bing as the search provider
     rag_response = client.get_search_rag_response(
-        query="iran", search_provider="bing", llm_model="SciPhi/Sensei-7B-V1"
+        query="synthetic biology", search_provider="bing", llm_model="SciPhi/Sensei-7B-V1"
     )
     print(rag_response)
 
-    search = client.search(query="iran", search_provider="bing")
+    search = client.search(query="synthetic biology", search_provider="bing")
     print(search)
 
     # Using AgentSearch as the search provider
     rag_response = client.get_search_rag_response(
-        query="iran",
+        query="synthetic biology",
         search_provider="agent-search",
         llm_model="SciPhi/Sensei-7B-V1",
     )
     print(rag_response)
 
-    search = client.search(query="iran", search_provider="agent-search")
+    search = client.search(query="synthetic biology", search_provider="agent-search")
     print(search)
