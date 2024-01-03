@@ -9,8 +9,6 @@ Welcome to AgentSearch [ΨΦ]
 .. raw:: html
 
    <p style="text-align:center">
-   <strong>An agent-first search engine.
-   </strong>
    </p>
 
    <p style="text-align:center">
@@ -20,17 +18,14 @@ Welcome to AgentSearch [ΨΦ]
    <a class="github-button" href="https://github.com/SciPhi-AI/agent-search/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork">Fork</a>
    </p>
 
-AgentSearch [ΨΦ]: A Comprehensive Agent-First Framework and Dataset for Webscale Search
-----------------------------------------------------------------------------------------
-
-AgentSearch is a powerful new tool that allows you to operate a webscale search engine locally, catering to both Large Language Models (LLMs) and human users. This open-source initiative provides access to over one billion high-quality embeddings sourced from a wide array of content, including selectively filtered Creative Commons data and the entirety of Arxiv, Wikipedia, and Project Gutenberg.
+This framework facilitates seamless integration with the AgentSearch dataset or hosted search APIs (e.g., Search Engines) and with RAG-specialized LLMs (e.g., Search Agents).
 
 Features of AgentSearch
-------------------------
+-----------------------
 
-- **Customizable**: Upload local data or adapt provided datasets to meet specific requirements.
-- **Offline Support**: Operates in a completely offline environment.
-- **API Endpoint**: Offers fully managed access through a dedicated API for seamless integration into various workflows.
+- **Search Agent**: Seamless integration with any RAG-specialized LLM, such as `Sensei-7B <https://huggingface.co/SciPhi/Sensei-7B-V1>`_.
+- **Customizable Search**: Deploy your own local search engine with the `AgentSearch dataset <https://huggingface.co/datasets/SciPhi/AgentSearch-V1>`_. Or, introduce your own custom datasets to meet your specific needs.
+- **API Endpoint**: Connect with SciPhi and other search provider APIs for easy deployment.
 
 Quickstart Guide for AgentSearch
 --------------------------------
@@ -48,49 +43,61 @@ Quick Setup
 
    `SciPhi API Key Signup <https://www.sciphi.ai/signup>`_
 
-3. Perform a Search:
+3. Execute a Search:
 
    .. code-block:: shell
 
       export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
       python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
 
-4. Generate a RAG Response:
+   .. code-block:: none
+
+      1. URL: https://en.wikipedia.org/wiki/Fermat's_last_theorem (Score: 0.89)
+      --------------------------------------------------
+      Fermat's Last Theorem
+      Text:
+      The case p = 3 was first stated by Abu-Mahmud Khojandi (10th century), but his attempted proof of the theorem was incorrect.[62] In 1770, Leonhard Euler gave a proof of p = 3,[63] but his proof by infinite descent[64] contained a major gap.[65] However, since Euler himself had proved the lemma necessary to complete the proof in other work, he is generally credited with the first proof.[66] Independent proofs were published[67] by Kausler (1802),[37] Legendre (1823, 1830),[39][68] Calzolari (1855),[69] Gabriel Lamé (1865),[70] Peter Guthrie Tait (1872),[71] Günther (1878),[72][full citation needed] Gambioli (1901),[48] Krey (1909),[73][full citation needed] Rychlík (1910),[53] Stockhaus (1910),[74] Carmichael (1915),[75] Johannes van der Corput (1915),[76] Axel Thue (1917),[77][full citation needed] and Duarte (1944).[78] The case p = 5 was proved[79] independently by Legendre and Peter Gustav Lejeune Dirichlet around 1825.[80] Alternative proofs were developed[81] by Carl Friedrich Gauss (1875,
+      ...
+
+4. Generate a search RAG Response:
 
    .. code-block:: shell
 
+      # For SciPhi `SearchAgent` with AgentSearch
       export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
-      # Use the SciPhi `SearchAgent` for LLM RAG w/ AgentSearch
       python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?"
-      # ... Output ...
-      # {"summary": "\nFermat's Last Theorem is a significant result in number theory, stating that for any natural number n greater than 2, there are no solutions to the equation \\(a^n + b^n = c^n\\) where \\(a\\), \\(b\\), and \\(c\\) are positive integers [5]. The theorem was first proposed by Pierre de Fermat in the margins of his copy of Diophantus's \"Arithmetica\" in the 17th century, but it remained unproved for over three centuries [8]. The first case of the theorem to be proven was by Fermat himself for \\(n = 4\\), using a method of infinite descent [9]. Leonhard Euler later provided a proof for the case \\(n = 3\\), although his initial proof contained errors that were later corrected [9].\n\nThe theorem was finally proven in its entirety in 1995 by British mathematician Andrew Wiles, using sophisticated mathematical tools and techniques that were not available during Fermat's lifetime [10]. This breakthrough marked the end of a long period of mathematical speculation and the resolution of a major historical puzzle in mathematics [10]. The proof of Fermat's Last Theorem has been hailed as one of the most significant achievements in the history of mathematics, demonstrating the power of modern mathematical methods and the persistence of mathematical inquiry over centuries [10].\n\n", "other_queries": ["Details of Fermat's Last Theorem proof", "Historical impact of Fermat's Last Theorem", "Contributions of Andrew Wiles to mathematics", "Techniques used in the proof of Fermat's Last Theorem", "Evolution of number theory post-Fermat's Last Theorem"]}</s>
 
+      # For OpenAI `gpt-3.5-turbo` LLM generation
       export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
       export OPENAI_API_KEY=MY_OPENAI_KEY
-      # Use OpenAI `gpt-3.5-turbo` for LLM generation
       python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 
-Example Outputs from Queries
--------------------------------
+   .. code-block:: none
 
-- Standard Search Output:
+      ...
+      {'response': "\nFermat's Last Theorem is a landmark statement in number theory, asserting that for any integer value of n greater than 2, the equation \\(x^n + y^n = z^n\\) has no solutions in positive integers x, y, and z [1][2]. This theorem has intrigued mathematicians for centuries, with the initial claim made by Pierre de Fermat in the 17th century. Fermat himself provided proofs for the cases n=4 and n=3, and partial proofs for other smaller values of n [16]. However, it was not until the late 20th century that the theorem was fully proven for all values of n greater than 2, thanks to the work of mathematician Andrew Wiles [7].\n\nThe proof of Fermat's Last Theorem has had a profound impact on mathematics, leading to significant advancements in the field. It has been described as one of the most difficult problems in the history of mathematics, and its resolution marked a major milestone in the understanding of number theory [10]. The proof itself has been recognized with prestigious awards, including the 2016 Abel Prize for Andrew Wiles, highlighting its importance and the depth of mathematical thought required to solve it [7].\n\nIn summary, Fermat's Last Theorem is a fundamental result in number theory, confirming a conjecture that had stumped mathematicians for over three centuries. The theorem's proof not only resolved a long-standing mathematical mystery but also catalyzed new developments within the discipline [1][2][7][10].\n\n", 'other_queries': ["Historical impact of Fermat's Last Theorem", "Explanation of Andrew Wiles' proof", "Significance of Fermat's Last Theorem in modern mathematics", 'The role of the modularity conjecture in the proof', "Advancements in number theory post-Fermat's Last Theorem"], ...SEARCH_RESULTS...}
 
-.. code-block:: none
+5. Code your own search &/or RAG workflow:
 
-   1. URL: https://en.wikipedia.org/wiki/Wiles%27s%20proof%20of%20Fermat%27s%20Last%20Theorem (Score: 0.85)
-   --------------------------------------------------
-   Title: Wiles's proof of Fermat's Last Theorem
-   Text:
-   is a proof by British mathematician Andrew Wiles of a special case of the modularity theorem for elliptic curves... Output Continues ...
+.. code-block:: python
 
-- RAG Response Output:
+    # Requires SCIPHI_API_KEY in the environment
+    from agent_search import SciPhi
 
-.. code-block:: none
+   # Perform a search
+   search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
+   print(search_response)
+   # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
 
-   {"summary": "\nFermat's Last Theorem is a significant result in number theory, stating that for any natural number n greater than 2, there are no solutions to the equation \\(a^n + b^n = c^n\\) where \\(a\\), \\(b\\), and \\(c\\) are positive integers [5]. The theorem was first proposed by Pierre de Fermat in the margins of his copy of Diophantus's \"Arithmetica\" in the 17th century, but it remained unproved for over three centuries [8]. The first case of the theorem to be proven was by Fermat himself for \\(n = 4\\), using a method of infinite descent [9]. Leonhard Euler later provided a proof for the case \\(n = 3\\), although his initial proof contained errors that were later corrected [9].\n\nThe theorem was finally proven in its entirety in 1995 by British mathematician Andrew Wiles, using sophisticated mathematical tools and techniques that were not available during Fermat's lifetime [10]. This breakthrough marked the end of a long period of mathematical speculation and the resolution of a major historical puzzle in mathematics [10]. The proof of Fermat's Last Theorem has been hailed as one of the most significant achievements in the history of mathematics, demonstrating the power of modern mathematical methods and the persistence of mathematical inquiry over centuries [10].\n\n", "other_queries": ["Details of Fermat's Last Theorem proof", "Historical impact of Fermat's Last Theorem", "Contributions of Andrew Wiles to mathematics", "Techniques used in the proof of Fermat's Last Theorem", "Evolution of number theory post-Fermat's Last Theorem"]}
+   # Generate a RAG response
+   rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+   print(rag_response)
+   # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
+
 
 Local Setup and Initialization
 -------------------------------
+Interested in standing up an instance of the open source search dataset that pairs with AgentSearch locally? Then follow the guide below.
 
 .. warning::
    This setup documentation is preliminary and not yet finalized. Please note that the setup process may change in the future.
@@ -138,7 +145,6 @@ Additional Notes
 ----------------
 
 - Ensure all installation commands are executed from the root directory of the AgentSearch project.
-- Customize the `query` in the command to fit your search needs.
 
 Documentation
 -------------
@@ -155,3 +161,4 @@ Documentation
    :caption: API
 
    api/main
+   python_client/main
