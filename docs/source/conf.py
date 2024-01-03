@@ -62,7 +62,7 @@ html_theme_options = {
     "use_repository_button": True,
 }
 html_css_files = [
-    'css/custom.css',
+    'custom.css',
 ]
 
 # Add any paths that contain custom static files (such as style sheets) here,
