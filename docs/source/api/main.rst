@@ -74,7 +74,7 @@ SciPhi adheres to the API specification of OpenAI's API, allowing compatibility 
 .. code-block:: bash
     
     export SEARCH_CONTEXT="N/A"
-    export PREFIX='{"summary":'
+    export PREFIX='{"response":'
 
     curl https://api.sciphi.ai/v1/completions \
       -H "Content-Type: application/json" \

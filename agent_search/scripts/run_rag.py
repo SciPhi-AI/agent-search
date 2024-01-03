@@ -15,7 +15,7 @@ Query:
 {query}
 
 ### Response:
-{{"summary":
+{{"response":
 """
 
 PROMPT = """
@@ -31,7 +31,7 @@ Query:
 {query}
 
 ### Response:
-{{"summary":
+{{"response":
 """
 
 

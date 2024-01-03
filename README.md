@@ -67,15 +67,21 @@ Resulting output:
 This output is a JSON ready format which can be parsed in Python, for ex., by calling `json.loads(completion)`. The output will be a JSON object with keys `summary` and `related_queries`.
 
 
-### Code your own search RAG workflow
+### Code your own search or RAG workflow
 
 ```python
 # Requires SCIPHI_API_KEY in env
 from agent_search import SciPhi
 
 client = SciPhi()
-rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
 
+# Perform a search
+search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
+print(search_response)
+# [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
+
+# Generate a RAG response
+rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
 print(rag_response)
 # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 ```

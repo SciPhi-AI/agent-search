@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class SearchResult(BaseModel):
     score: Optional[float] = None
     url: str
-    metadata: Optional[Dict[str, Union[str, float]]] = None
+    metadata: Dict[str, Union[str, float]]
 
 
 class SearchRAGResponse(BaseModel):

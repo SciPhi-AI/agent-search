@@ -84,15 +84,20 @@ Quick Setup
     # Requires SCIPHI_API_KEY in the environment
     from agent_search import SciPhi
 
-    client = SciPhi()
-    rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+   # Perform a search
+   search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
+   print(search_response)
+   # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
 
-    print(rag_response)
-    # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
+   # Generate a RAG response
+   rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+   print(rag_response)
+   # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 
 
 Local Setup and Initialization
 -------------------------------
+Interested in standing up an instance of the open source search dataset that pairs with AgentSearch locally? Then follow the guide below.
 
 .. warning::
    This setup documentation is preliminary and not yet finalized. Please note that the setup process may change in the future.
