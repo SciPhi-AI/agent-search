@@ -64,15 +64,16 @@ Quick Setup
       python -m agent_search.scripts.run_rag run --query="What is Fermat's last theorem?" --llm_provider_name=openai --llm_model_name=gpt-3.5-turbo
 
 
-- Standard Search Output:
+   - Printed Output:
 
-.. code-block:: none
+   .. code-block:: none
 
-   1. URL: https://en.wikipedia.org/wiki/Fermat's_last_theorem (Score: 0.89)
-   --------------------------------------------------
-   Fermat's Last Theorem
-   Text:
-   The case p = 3 was first stated by Abu-Mahmud Khojandi (10th century), but his attempted proof of the theorem was incorrect.[62] In 1770, Leonhard Euler gave a proof of p = 3,[63] but his proof by infinite descent[64] contained a major gap.[65] However, since Euler himself had proved the lemma necessary to complete the proof in other work, he is generally credited with the first proof.[66] Independent proofs were published[67] by Kausler (1802),[37] Legendre (1823, 1830),[39][68] Calzolari (1855),[69] Gabriel Lamé (1865),[70] Peter Guthrie Tait (1872),[71] Günther (1878),[72][full citation needed] Gambioli (1901),[48] Krey (1909),[73][full citation needed] Rychlík (1910),[53] Stockhaus (1910),[74] Carmichael (1915),[75] Johannes van der Corput (1915),[76] Axel Thue (1917),[77][full citation needed] and Duarte (1944).[78] The case p = 5 was proved[79] independently by Legendre and Peter Gustav Lejeune Dirichlet around 1825.[80] Alternative proofs were developed[81] by Carl Friedrich Gauss (1875,
+      1. URL: https://en.wikipedia.org/wiki/Fermat's_last_theorem (Score: 0.89)
+      --------------------------------------------------
+      Fermat's Last Theorem
+      Text:
+      The case p = 3 was first stated by Abu-Mahmud Khojandi (10th century), but his attempted proof of the theorem was incorrect.[62] In 1770, Leonhard Euler gave a proof of p = 3,[63] but his proof by infinite descent[64] contained a major gap.[65] However, since Euler himself had proved the lemma necessary to complete the proof in other work, he is generally credited with the first proof.[66] Independent proofs were published[67] by Kausler (1802),[37] Legendre (1823, 1830),[39][68] Calzolari (1855),[69] Gabriel Lamé (1865),[70] Peter Guthrie Tait (1872),[71] Günther (1878),[72][full citation needed] Gambioli (1901),[48] Krey (1909),[73][full citation needed] Rychlík (1910),[53] Stockhaus (1910),[74] Carmichael (1915),[75] Johannes van der Corput (1915),[76] Axel Thue (1917),[77][full citation needed] and Duarte (1944).[78] The case p = 5 was proved[79] independently by Legendre and Peter Gustav Lejeune Dirichlet around 1825.[80] Alternative proofs were developed[81] by Carl Friedrich Gauss (1875,
+      ...
 
 
 5. Code your own search RAG workflow:
@@ -84,15 +85,16 @@ Quick Setup
 
     client = SciPhi()
     rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+
     print(rag_response)
     # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 
 
-- RAG Response Output:
+   - RAG Response Output:
 
-.. code-block:: none
+   .. code-block:: none
 
-   {'summary': "\nFermat's Last Theorem is a landmark statement in number theory, asserting that for any integer value of n greater than 2, the equation \\(x^n + y^n = z^n\\) has no solutions in positive integers x, y, and z [1][2]. This theorem has intrigued mathematicians for centuries, with the initial claim made by Pierre de Fermat in the 17th century. Fermat himself provided proofs for the cases n=4 and n=3, and partial proofs for other smaller values of n [16]. However, it was not until the late 20th century that the theorem was fully proven for all values of n greater than 2, thanks to the work of mathematician Andrew Wiles [7].\n\nThe proof of Fermat's Last Theorem has had a profound impact on mathematics, leading to significant advancements in the field. It has been described as one of the most difficult problems in the history of mathematics, and its resolution marked a major milestone in the understanding of number theory [10]. The proof itself has been recognized with prestigious awards, including the 2016 Abel Prize for Andrew Wiles, highlighting its importance and the depth of mathematical thought required to solve it [7].\n\nIn summary, Fermat's Last Theorem is a fundamental result in number theory, confirming a conjecture that had stumped mathematicians for over three centuries. The theorem's proof not only resolved a long-standing mathematical mystery but also catalyzed new developments within the discipline [1][2][7][10].\n\n", 'other_queries': ["Historical impact of Fermat's Last Theorem", "Explanation of Andrew Wiles' proof", "Significance of Fermat's Last Theorem in modern mathematics", 'The role of the modularity conjecture in the proof', "Advancements in number theory post-Fermat's Last Theorem"], ...SEARCH_RESULTS...}
+      {'response': "\nFermat's Last Theorem is a landmark statement in number theory, asserting that for any integer value of n greater than 2, the equation \\(x^n + y^n = z^n\\) has no solutions in positive integers x, y, and z [1][2]. This theorem has intrigued mathematicians for centuries, with the initial claim made by Pierre de Fermat in the 17th century. Fermat himself provided proofs for the cases n=4 and n=3, and partial proofs for other smaller values of n [16]. However, it was not until the late 20th century that the theorem was fully proven for all values of n greater than 2, thanks to the work of mathematician Andrew Wiles [7].\n\nThe proof of Fermat's Last Theorem has had a profound impact on mathematics, leading to significant advancements in the field. It has been described as one of the most difficult problems in the history of mathematics, and its resolution marked a major milestone in the understanding of number theory [10]. The proof itself has been recognized with prestigious awards, including the 2016 Abel Prize for Andrew Wiles, highlighting its importance and the depth of mathematical thought required to solve it [7].\n\nIn summary, Fermat's Last Theorem is a fundamental result in number theory, confirming a conjecture that had stumped mathematicians for over three centuries. The theorem's proof not only resolved a long-standing mathematical mystery but also catalyzed new developments within the discipline [1][2][7][10].\n\n", 'other_queries': ["Historical impact of Fermat's Last Theorem", "Explanation of Andrew Wiles' proof", "Significance of Fermat's Last Theorem in modern mathematics", 'The role of the modularity conjecture in the proof', "Advancements in number theory post-Fermat's Last Theorem"], ...SEARCH_RESULTS...}
 
 Local Setup and Initialization
 -------------------------------
@@ -143,7 +145,6 @@ Additional Notes
 ----------------
 
 - Ensure all installation commands are executed from the root directory of the AgentSearch project.
-- Customize the `query` in the command to fit your search needs.
 
 Documentation
 -------------
