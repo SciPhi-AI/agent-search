@@ -15,7 +15,7 @@ class SearchResult(BaseModel):
     metadata: Optional[Dict[str, Union[str, float]]] = None
 
 
-class SearchResponse(BaseModel):
+class SearchRAGResponse(BaseModel):
     response: str
     related_queries: List[str]
     search_results: List[SearchResult]
@@ -192,7 +192,7 @@ class SciPhi:
 
         self._handle_search_response(handled_response["search_results"])
         # Use Pydantic model for parsing and validation
-        search_response = SearchResponse(**handled_response)
+        search_response = SearchRAGResponse(**handled_response)
         return search_response.dict()
 
     def completion(
@@ -202,7 +202,7 @@ class SciPhi:
         llm_max_tokens_to_sample: int = 1_024,
         llm_temperature: float = 0.2,
         llm_top_p: float = 0.90,
-    ) -> SearchResponse:
+    ) -> SearchRAGResponse:
         """
         Generates a completion for a given prompt using the SciPhi API.
 
@@ -252,7 +252,7 @@ class SciPhi:
 
         return completion
 
-    def close(self):
+    def close(self) -> None:
         """
         Closes the HTTP client.
         """

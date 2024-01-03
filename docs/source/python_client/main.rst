@@ -71,7 +71,7 @@ Model Classes
 
         Optional metadata for the search result.
 
-.. class:: SearchResponse
+.. class:: SearchRAGResponse
 
     Represents the response from a search or RAG query.
 
