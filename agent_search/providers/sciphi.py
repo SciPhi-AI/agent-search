@@ -77,7 +77,7 @@ class SciPhi:
                 )
         return handled_response
 
-    def forward_request(
+    def completion(
         self, path: str, method: str, headers: dict, body: dict
     ):
         url = f"/v1/{path}"

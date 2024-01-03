@@ -156,3 +156,4 @@ Documentation
    :caption: API
 
    api/main
+   python_client/main
