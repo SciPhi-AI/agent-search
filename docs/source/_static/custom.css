@@ -1,3 +1,7 @@
 .class::before {
     color: white;
 }
+
+dl.py.class {
+    color: white;
+}
