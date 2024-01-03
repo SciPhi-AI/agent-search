@@ -4,11 +4,11 @@ from typing import List, Optional
 
 import numpy as np
 
-from agent_search.core import SERPResult
+from agent_search.core import AgentSearchResult
 
 
 def select_top_urls(
-    ordered_points: List[SERPResult],
+    ordered_points: List[AgentSearchResult],
     max_urls: int = 10,
     url_contains: Optional[List[str]] = None,
 ) -> List[str]:

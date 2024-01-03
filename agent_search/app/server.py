@@ -47,10 +47,8 @@ class SearchServer:
         url_contains_filter=None,
     ):
         """Run a search query using the WebSearchEngine client"""
-        logger.debug(
-            f"Step 0: Querying {query}"
-        )
-        
+        logger.debug(f"Step 0: Querying {query}")
+
         query_vector = self.client.get_query_vector(query)
         broad_results = timed_fn(self.client.similarity_search)(
             query_vector=query_vector, limit=limit_broad_results

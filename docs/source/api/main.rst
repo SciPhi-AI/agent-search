@@ -23,7 +23,7 @@ Search Endpoint
   - ``query``: A string that contains the query you wish to search for.
 
 **Response**: 
-A list SERPResult objects. Each object contains the following fields:
+A list AgentSearchResult objects. Each object contains the following fields:
   - ``score``: The ranked relevance score of the document.
   - ``url``: The URL of the document.
   - ``title``: The title of the document.

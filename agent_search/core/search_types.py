@@ -3,7 +3,7 @@ from typing import Any, Optional
 from pydantic import BaseModel
 
 
-class SERPResult(BaseModel):
+class AgentSearchResult(BaseModel):
     """A dataclass to store the search result"""
 
     score: float
@@ -19,3 +19,18 @@ class SERPResult(BaseModel):
         if self.title and self.title == self.text[0 : len(self.title)]:
             self.text = self.text[len(self.title) :]
         self.text = self.text.strip()
+
+    def to_string_dict(self) -> dict:
+        """Returns a dictionary representation with all values as strings."""
+        return {
+            "score": str(self.score),
+            "url": self.url,
+            "title": self.title,
+            "dataset": self.dataset,
+            "metadata": self.metadata,
+            "text": self.text,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(**data)
