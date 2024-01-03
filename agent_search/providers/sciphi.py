@@ -6,9 +6,6 @@ from typing import Optional
 import httpx
 
 logger = logging.getLogger(__name__)
-# from synthesizer.core import LLMProviderName, RAGProviderName
-# from synthesizer.interface import LLMInterfaceManager, RAGInterfaceManager
-# from synthesizer.llm import GenerationConfig
 
 
 class SciPhi:
