@@ -89,7 +89,7 @@ class RagDemo:
         formatted_prompt = PROMPT.format(
             rag_context=rag_result.context, query=query
         )
-        completion = '{"summary":' + llm_interface.get_completion(
+        completion = '{"response":' + llm_interface.get_completion(
             formatted_prompt, generation_config
         ).replace("</s>", "")
 
