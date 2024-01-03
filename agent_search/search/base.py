@@ -3,13 +3,13 @@ import json
 import logging
 import os
 from typing import List
-import psycopg2
 
 import numpy as np
+import psycopg2
 from qdrant_client import QdrantClient
 from transformers import AutoModel
 
-from agent_search.core import SERPResult
+from agent_search.core import AgentSearchResult
 from agent_search.core.utils import (
     cosine_similarity,
     get_data_path,
@@ -106,7 +106,7 @@ class WebSearchEngine:
         )
 
         return [
-            SERPResult(
+            AgentSearchResult(
                 score=point.score,
                 text=point.payload["text"],
                 title=None,
@@ -129,8 +129,10 @@ class WebSearchEngine:
             ) as conn:
                 with conn.cursor() as cur:
                     for i in range(0, len(urls), batch_size):
-                        batch_urls = urls[i:i + batch_size]
-                        logger.info(f'Executing batch query for URLs: {batch_urls[0:2]}')
+                        batch_urls = urls[i : i + batch_size]
+                        logger.info(
+                            f"Executing batch query for URLs: {batch_urls[0:2]}"
+                        )
                         query = f"SELECT url, title, metadata, dataset, text_chunks, embeddings FROM {self.config['postgres_table_name']} WHERE url = ANY(%s)"
                         cur.execute(query, (batch_urls,))
                         batch_results = cur.fetchall()
@@ -146,7 +148,7 @@ class WebSearchEngine:
         query_vector: np.ndarray,
         urls: List[str],
         limit: int = 100,
-    ) -> List[SERPResult]:
+    ) -> List[AgentSearchResult]:
         """Hierarchical URL search to find the most similar text chunk for the given query and URLs"""
         results = self.execute_batch_query(urls)
         # List to store the results along with their similarity scores
@@ -181,7 +183,7 @@ class WebSearchEngine:
 
             # Store the most similar chunk and its similarity score
             similarity_results.append(
-                SERPResult(
+                AgentSearchResult(
                     score=max_similarity,
                     url=url,
                     title=title,
@@ -197,9 +199,9 @@ class WebSearchEngine:
 
     def pagerank_reranking(
         self,
-        similarity_results: List[SERPResult],
+        similarity_results: List[AgentSearchResult],
         limit: int = 100,
-    ) -> List[SERPResult]:
+    ) -> List[AgentSearchResult]:
         """Reranks the results based on the PageRank score of the domain"""
         if not self.pagerank_rerank_module:
             raise Exception(
@@ -221,7 +223,7 @@ class WebSearchEngine:
                 + (1 - self.pagerank_importance) * result.score
             )
             pagerank_results.append(
-                SERPResult(
+                AgentSearchResult(
                     score=reweighted_score,
                     url=result.url,
                     title=result.title,

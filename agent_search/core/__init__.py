@@ -1,4 +1,4 @@
-from .client import SERPClient
-from .search_types import SERPResult
+from .client import AgentSearchClient
+from .search_types import AgentSearchResult
 
-__all__ = ["SERPClient", "SERPResult"]
+__all__ = ["AgentSearchClient", "AgentSearchResult"]

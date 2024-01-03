@@ -3,32 +3,10 @@ from typing import List, Optional
 
 import requests
 
-
-class SERPResult:
-    def __init__(
-        self,
-        score: float,
-        url: str,
-        title: str,
-        dataset: str,
-        metadata: dict,
-        text: str,
-    ):
-        self.score = score
-        self.url = url
-        self.title = title
-        self.dataset = dataset
-        self.metadata = metadata
-        self.text = text.strip()
-        if self.title and self.text.startswith(self.title):
-            self.text = self.text[len(self.title) :].strip()
-
-    @classmethod
-    def from_dict(cls, data: dict):
-        return cls(**data)
+from .search_types import AgentSearchResult
 
 
-class SERPClient:
+class AgentSearchClient:
     def __init__(
         self,
         api_base: Optional[str] = None,
@@ -51,7 +29,7 @@ class SERPClient:
         limit_deduped_url_results: int = 100,
         limit_hierarchical_url_results: int = 25,
         limit_final_pagerank_results: int = 10,
-    ) -> List[SERPResult]:
+    ) -> List[AgentSearchResult]:
         headers = {
             "Authorization": f"Bearer {self.auth_token}",
             "Content-Type": "application/json",
@@ -68,6 +46,9 @@ class SERPClient:
         )
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
         results = response.json()
-        serp_results = [SERPResult.from_dict(result) for result in results]
+
+        serp_results = [
+            AgentSearchResult.from_dict(result) for result in results
+        ]
 
         return serp_results

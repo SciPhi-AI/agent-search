@@ -3,13 +3,13 @@ import logging
 import fire
 import requests
 
-from agent_search.core import SERPClient
+from agent_search.core import AgentSearchClient
 
 logger = logging.getLogger(__name__)
 
 
 class QueryDemo:
-    """A wrapper class to run queries on the SERPClient"""
+    """A wrapper class to run queries on the AgentSearchClient"""
 
     def __init__(self):
         pass
@@ -19,8 +19,8 @@ class QueryDemo:
         query="What is a lagrangian?",
         api_base="https://api.sciphi.ai",
     ):
-        """Run a search with the SERPClient"""
-        client = SERPClient(api_base)
+        """Run a search with the AgentSearchClient"""
+        client = AgentSearchClient(api_base)
         logging.basicConfig(level=logging.INFO)
 
         try:
@@ -32,7 +32,6 @@ class QueryDemo:
                 logging.info("-" * 50)
                 logging.info(f"Title: \033[93m{result.title}\033[0m")
                 logging.info(f"Text:\n{result.text}\n")
-                # logging.info(f"Metadata:\n{result.metadata}...")
                 logging.info("-" * 80)
 
         except requests.HTTPError as e:
