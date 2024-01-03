@@ -61,6 +61,9 @@ html_theme_options = {
     "repository_url": "https://github.com/SciPhi-AI/agent-search",
     "use_repository_button": True,
 }
+html_css_files = [
+    'css/custom.css',
+]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
