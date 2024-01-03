@@ -23,8 +23,8 @@ pip install agent-search
 2. Use the following bash command to run a search query:
 
 ```shell
-   export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
-   python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
+export SCIPHI_API_KEY=MY_SCIPHI_API_KEY
+python -m agent_search.scripts.run_search run --query="What is Fermat's last theorem?"
 ```
 
 This will output results like the following:
