@@ -40,7 +40,7 @@ The case p = 3 was first stated by Abu-Mahmud Khojandi (10th century), but his
 
 For further information, you may refer to the [documentation](https://agent-search.readthedocs.io/en/latest/).
 
-### Execute a RAG response
+### Generate a search RAG response
 
 - To generate a rag response with the hosted AgentSearch API:
 
@@ -75,6 +75,7 @@ from agent_search import SciPhi
 
 client = SciPhi()
 rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+
 print(rag_response)
 # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 ```
