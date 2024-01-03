@@ -30,10 +30,10 @@ python -m agent_search.scripts.run_search run --query="What is Fermat's last the
 This will output results like the following:
 
 ```output
-INFO:root:1. URL: https://en.wikipedia.org/wiki/Fermat's_last_theorem (Score: 0.89)
-INFO:root:--------------------------------------------------
-INFO:root:Title: Fermat's Last Theorem
-INFO:root:Text:
+1. URL: https://en.wikipedia.org/wiki/Fermat's_last_theorem (Score: 0.89)
+--------------------------------------------------
+Title: Fermat's Last Theorem
+Text:
 The case p = 3 was first stated by Abu-Mahmud Khojandi (10th century), but his attempted proof of the theorem was incorrect.[62] In 1770, Leonhard Euler gave a proof of p = 3,[63] but his proof by infinite descent[64] contained a major gap.[65] However, since Euler himself had proved the lemma necessary to complete the proof in other work, he is generally credited with the first proof.[66] Independent proofs were published[67] by Kausler (1802),[37] Legendre (1823, 1830),[39][68] Calzolari (1855),[69] Gabriel Lamé (1865),[70] Peter Guthrie Tait (1872),[71] Günther (1878),[72][full citation needed] Gambioli (1901),[48] Krey (1909),[73][full citation needed] Rychlík (1910),[53] Stockhaus (1910),[74] Carmichael (1915),[75] Johannes van der Corput (1915),[76] Axel Thue (1917),[77][full citation needed] and Duarte (1944).[78] The case p = 5 was proved[79] independently by Legendre and Peter Gustav Lejeune Dirichlet around 1825.[80] Alternative proofs were developed[81] by Carl Friedrich Gauss (1875,
 ...
 ```
@@ -72,10 +72,11 @@ This output is a JSON ready format which can be parsed in Python, for ex., by ca
 ```python
 # Requires SCIPHI_API_KEY in env
 from agent_search import SciPhi
+
 client = SciPhi()
 rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
 print(rag_response)
-# { 'response': '...', 'other_queries': '...' } ##  'search_results' is included when searching with 'agent-search'
+# { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 ```
 ---
 

@@ -71,11 +71,12 @@ class SciPhi:
         }
         response = self.client.post(url, json=payload)
         handled_response = self._handle_response(response)
-        if search_provider == "agent-search":
-            for result in handled_response["search_results"]:
+        for result in handled_response["search_results"]:
+            if "score" in result:
                 result["score"] = float(result["score"])
+            if "metadata" in result:
                 result["metadata"] = (
-                    json.loads(result["metadata"]) if result != "" else {}
+                    json.loads(result["metadata"]) if result["metadata"] != "" else {}
                 )
         return handled_response
 
