@@ -111,8 +111,12 @@ A dictionary with the search response and related queries.
         "search_results" : [{ ...see above... }]
     }
 
-LLM Endpoints
+LLM Completiongs Endpoint
 ~~~~~~~~~~~~~~~~~~~
+
+If you would like to use the Sensei model for any purpose other than the provided Search RAG, perhaps with your own search context, then you may access the model directly. 
+
+If you want the simplest integration with search possible, then you should rather refer to the `search_rag` endpoint above.
 
 SciPhi adheres to the API specification of OpenAI's API, allowing compatibility with any application designed for the OpenAI API. Below is an example curl command:
 
