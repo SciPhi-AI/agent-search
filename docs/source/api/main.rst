@@ -87,6 +87,7 @@ A dictionary with the search response and related queries.
 **Example**:
 
 .. code-block:: bash
+    
     export SCIPHI_API_KEY=${MY_API_KEY}
 
     curl -X POST https://api.sciphi.ai/search_rag \
