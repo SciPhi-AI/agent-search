@@ -14,6 +14,7 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 from docutils import nodes
+from docutils.parsers.rst import roles
 
 # -- Project information -----------------------------------------------------
 
@@ -21,12 +22,13 @@ project = "AgentSearch"
 copyright = "2023, Emergent AGI Inc."
 author = "the AgentSearch Team"
 
-def colored_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    node = nodes.inline(rawtext, classes=["colored-" + text])
+
+def white_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    node = nodes.inline(rawtext, text, classes=["white"])
     return [node], []
 
 def setup(app):
-    app.add_role('colored', colored_role)
+    roles.register_local_role('white', white_role)
 
 
 # -- General configuration ---------------------------------------------------
