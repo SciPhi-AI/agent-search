@@ -9,7 +9,7 @@ The SciPhi API Client is a Python library for interacting with the SciPhi API. I
 Classes and Methods
 -------------------
 
-.. class:: SciPhi
+.. class:: :white:`SciPhi`
 
    Client for interacting with the SciPhi API.
 
@@ -107,8 +107,6 @@ Example usage:
 
    # Generate a completion
    completion = client.completion("Explain the Turing Test", llm_model_name="SciPhi/Sensei-7B-V1
-
-")
 
    # Close the client
    client.close()
