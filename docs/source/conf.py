@@ -41,7 +41,7 @@ extensions = [
     # "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
-    "sphinx_rtd_dark_mode"
+    # "sphinx_rtd_dark_mode"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -62,7 +62,7 @@ copybutton_prompt_is_regexp = True
 # a list of builtin themes.
 #
 html_title = project
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 html_logo = "assets/logos/sciphi.png"
 html_theme_options = {
     "logo_only": True,
