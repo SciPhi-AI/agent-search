@@ -70,46 +70,45 @@ A list AgentSearchResult objects. Each object contains the following fields:
 Search RAG Endpoint
 ~~~~~~~~~~~~~~~~~~~
 
-- **URL**: `/search_rag`
-- **Method**: `POST`
+- **URL**: ``/search_rag``
+- **Method**: ``POST```
 - **Description**: Retrieves a search RAG (Retrieval-Augmented Generation) response from the API.
 
 **Request Body**:
-  - `query` (str): The search query string.
-  - `search_provider` (str): The search provider to use.
-  - `llm_model` (str): The language model to use.
-  - `temperature` (int): The temperature setting for the query.
-  - `top_p` (int): The top-p setting for the query.
+  - ``query`` (str): The search query string.
+  - ``search_provider`` (str): The search provider to use.
+  - ``llm_model`` (str): The language model to use.
+  - ``temperature`` (int): The temperature setting for the query.
+  - ``top_p`` (int): The top-p setting for the query.
 
 **Response**:
 A dictionary with the search response and related queries.
 
 **Example**:
 
-```bash
-export SCIPHI_API_KEY=${MY_API_KEY}
+.. code-block:: bash
+    export SCIPHI_API_KEY=${MY_API_KEY}
 
-curl -X POST https://api.sciphi.ai/search_rag \
-    -H "Authorization: Bearer $SCIPHI_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-       "query": "Explain the Turing Test",
-       "search_provider": "bing",
-       "llm_model": "SciPhi/Sensei-7B-V1",
-       "temperature": 0.2,
-       "top_p": 0.95
-     }'
-```
+    curl -X POST https://api.sciphi.ai/search_rag \
+        -H "Authorization: Bearer $SCIPHI_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+        "query": "Explain the Turing Test",
+        "search_provider": "bing",
+        "llm_model": "SciPhi/Sensei-7B-V1",
+        "temperature": 0.2,
+        "top_p": 0.95
+        }'
 
 **Response**:
 
-```json
-{
-    "response": "The Turing Test is a measure of a machine's...",
-    "related_queries": ["What are the origins of the Turing Test?", "How does the Turing Test work?", ...]
-    "search_results" : [{ ...see above... }]
-}
-```
+.. code-block:: json
+
+    {
+        "response": "The Turing Test is a measure of a machine's...",
+        "related_queries": ["What are the origins of the Turing Test?", "How does the Turing Test work?", ...]
+        "search_results" : [{ ...see above... }]
+    }
 
 LLM Endpoints
 ~~~~~~~~~~~~~~~~~~~
