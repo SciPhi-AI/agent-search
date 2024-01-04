@@ -29,7 +29,7 @@ author = "the AgentSearch Team"
 # ones.
 extensions = [
     "sphinx.ext.napoleon",
-    "sphinx.ext.viewcode",
+    # "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
     "sphinx_rtd_dark_mode"
