@@ -87,18 +87,18 @@ A dictionary with the search response and related queries.
 **Example**:
 
 .. code-block:: bash
-    
+
     export SCIPHI_API_KEY=${MY_API_KEY}
 
     curl -X POST https://api.sciphi.ai/search_rag \
         -H "Authorization: Bearer $SCIPHI_API_KEY" \
         -H "Content-Type: application/json" \
         -d '{
-        "query": "Explain the Turing Test",
-        "search_provider": "bing",
-        "llm_model": "SciPhi/Sensei-7B-V1",
-        "temperature": 0.2,
-        "top_p": 0.95
+            "query": "Explain the Turing Test",
+            "search_provider": "bing",
+            "llm_model": "SciPhi/Sensei-7B-V1",
+            "temperature": 0.2,
+            "top_p": 0.95
         }'
 
 **Response**:
