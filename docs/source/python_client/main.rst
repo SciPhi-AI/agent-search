@@ -9,6 +9,7 @@ The SciPhi API Client is a Python library for interacting with the SciPhi API. I
 Classes and Methods
 -------------------
 
+`SciPhi` Class
 .. class:: :white:`SciPhi`
 
    `SciPhi` Client for interacting with the SciPhi API.
