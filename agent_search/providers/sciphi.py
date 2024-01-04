@@ -192,7 +192,6 @@ class SciPhi:
 
         self._handle_search_response(handled_response["search_results"])
         # Use Pydantic model for parsing and validation
-        print('handled_response = ', handled_response)
         search_response = SearchRAGResponse(**handled_response)
         return search_response.dict()
 
@@ -246,7 +245,6 @@ class SciPhi:
         completion = '{"response":' + llm_interface.get_completion(
             prompt, generation_config
         ).replace("</s>", "")
-        print('completion = ', completion)
         try:
             completion = json.loads(completion)
 
