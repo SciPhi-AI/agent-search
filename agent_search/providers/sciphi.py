@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Any
 
 import httpx
 from pydantic import BaseModel, Field
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class SearchResult(BaseModel):
     score: Optional[float] = None
     url: str
-    metadata: Dict[str, Union[str, float]]
+    metadata: Any
 
 
 class SearchRAGResponse(BaseModel):
@@ -125,7 +125,7 @@ class SciPhi:
                         else {}
                     )
                 except Exception as e:
-                    result["metadata"] = {}
+                    result["metadata"] = dict()
 
     def search(self, query: str, search_provider: str) -> List[Dict]:
         """
@@ -192,6 +192,7 @@ class SciPhi:
 
         self._handle_search_response(handled_response["search_results"])
         # Use Pydantic model for parsing and validation
+        print('handled_response = ', handled_response)
         search_response = SearchRAGResponse(**handled_response)
         return search_response.dict()
 
