@@ -13,13 +13,20 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+from docutils import nodes
 
 # -- Project information -----------------------------------------------------
 
 project = "AgentSearch"
 copyright = "2023, Emergent AGI Inc."
 author = "the AgentSearch Team"
+
+def colored_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    node = nodes.inline(rawtext, classes=["colored-" + text])
+    return [node], []
+
+def setup(app):
+    app.add_role('colored', colored_role)
 
 
 # -- General configuration ---------------------------------------------------
