@@ -79,20 +79,20 @@ Quick Setup
 
 5. Code your own search &/or RAG workflow:
 
-.. code-block:: python
+   .. code-block:: python
 
-   # Requires SCIPHI_API_KEY in the environment
-   from agent_search import SciPhi
+      # Requires SCIPHI_API_KEY in the environment
+      from agent_search import SciPhi
 
-   # Perform a search
-   search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
-   print(search_response)
-   # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
+      # Perform a search
+      search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
+      print(search_response)
+      # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
 
-   # Generate a RAG response
-   rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
-   print(rag_response)
-   # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
+      # Generate a RAG response
+      rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+      print(rag_response)
+      # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 
 
 Local Setup and Initialization
