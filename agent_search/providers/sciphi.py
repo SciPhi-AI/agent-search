@@ -244,13 +244,18 @@ class SciPhi:
 
         completion = '{"response":' + llm_interface.get_completion(
             prompt, generation_config
-        ).replace("</s>", "").replace("")
-        completion = json.loads(completion)
+        ).replace("</s>", "")
+        print('completion = ', completion)
+        try:
+            completion = json.loads(completion)
 
-        # rename the other queries to `related_queries` until LLM output is re-factored.
-        completion["related_queries"] = completion.pop("other_queries")
+            # rename the other queries to `related_queries` until LLM output is re-factored.
+            completion["related_queries"] = completion.pop("other_queries")
 
-        return completion
+            return completion
+        
+        except Exception as e:
+            return {'error': e}
 
     def close(self) -> None:
         """

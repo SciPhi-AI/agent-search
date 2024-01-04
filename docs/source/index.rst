@@ -81,8 +81,8 @@ Quick Setup
 
 .. code-block:: python
 
-    # Requires SCIPHI_API_KEY in the environment
-    from agent_search import SciPhi
+   # Requires SCIPHI_API_KEY in the environment
+   from agent_search import SciPhi
 
    # Perform a search
    search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')

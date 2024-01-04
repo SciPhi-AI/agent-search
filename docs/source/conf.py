@@ -13,13 +13,22 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+from docutils import nodes
+from docutils.parsers.rst import roles
 
 # -- Project information -----------------------------------------------------
 
 project = "AgentSearch"
 copyright = "2023, Emergent AGI Inc."
 author = "the AgentSearch Team"
+
+
+def white_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    node = nodes.inline(rawtext, text, classes=["white"])
+    return [node], []
+
+def setup(app):
+    roles.register_local_role('white', white_role)
 
 
 # -- General configuration ---------------------------------------------------
@@ -29,10 +38,10 @@ author = "the AgentSearch Team"
 # ones.
 extensions = [
     "sphinx.ext.napoleon",
-    "sphinx.ext.viewcode",
+    # "sphinx.ext.viewcode",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
-    "sphinx_rtd_dark_mode",
+    # "sphinx_rtd_dark_mode"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -53,7 +62,7 @@ copybutton_prompt_is_regexp = True
 # a list of builtin themes.
 #
 html_title = project
-html_theme = "sphinx_rtd_dark_mode"
+html_theme = "sphinx_book_theme"
 html_logo = "assets/logos/sciphi.png"
 html_theme_options = {
     "logo_only": True,
@@ -61,9 +70,9 @@ html_theme_options = {
     "repository_url": "https://github.com/SciPhi-AI/agent-search",
     "use_repository_button": True,
 }
-html_css_files = [
-    'css/custom.css',
-]
+
+# user starts in dark mode
+default_dark_mode = True
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
