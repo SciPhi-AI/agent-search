@@ -11,7 +11,7 @@ Classes and Methods
 
 .. class:: :white:`SciPhi`
 
-   Client for interacting with the SciPhi API.
+   `SciPhi` Client for interacting with the SciPhi API.
 
    Attributes:
       api_base (str): Base URL for the SciPhi API.
