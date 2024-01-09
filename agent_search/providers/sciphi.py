@@ -229,8 +229,7 @@ class SciPhi:
             "top_p": top_p,
         }
         try:
-            response = self._retry_api_request("post", url, payload)
-            handled_response = self._handle_api_response(response)
+            handled_response = self._retry_api_request("post", url, payload)
 
             # rename the other queries to `related_queries` until LLM output is re-factored.
             handled_response["related_queries"] = handled_response.pop(
