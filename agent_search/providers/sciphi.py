@@ -1,7 +1,8 @@
 import json
 import logging
 import os
-from typing import Dict, List, Optional, Any
+import time
+from typing import Any, Dict, List, Optional
 
 import httpx
 from pydantic import BaseModel, Field
@@ -130,24 +131,67 @@ class SciPhi:
                 except Exception as e:
                     result["metadata"] = dict()
 
-    def search(self, query: str, search_provider: str) -> List[Dict]:
+    def _retry_api_request(
+        self, method: str, url: str, payload: Dict, max_retries: int = 3
+    ):
         """
-        Performs a search query using the SciPhi API.
+        Common method for retrying API requests with exponential backoff.
+
+        Args:
+            method (str): The HTTP method to use ('get' or 'post').
+            url (str): The API endpoint.
+            payload (Dict): The payload for the request.
+            max_retries (int): Maximum number of retry attempts.
+
+        Returns:
+            Dict: The JSON response from the API.
+
+        Raises:
+            Exception: If the maximum number of retries is reached.
+        """
+        for attempt in range(max_retries):
+            try:
+                response = getattr(self.client, method)(url, json=payload)
+                return self._handle_api_response(response)
+
+            except httpx.HTTPError as e:
+                logger.info(f"HTTP error on attempt {attempt + 1}: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(0.5 * (2**attempt))
+
+            except Exception as e:
+                logger.error(f"Error on attempt {attempt + 1}: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(0.5 * (2**attempt))
+
+        raise Exception("Failed to fetch data after maximum retries.")
+
+    def search(
+        self, query: str, search_provider: str, max_retries: int = 3
+    ) -> List[Dict]:
+        """
+        Performs a search query using the SciPhi API with retry and backoff logic.
 
         Args:
             query (str): The search query string.
             search_provider (str): The search provider to use.
+            max_retries (int): Maximum number of retry attempts.
 
         Returns:
-            List[Dict]: A list of search results.
+        List[Dict]: A list of search results.
         """
-
         url = f"/search"
         payload = {"provider": search_provider, "query": query}
-        response = self.client.post(url, json=payload)
-        handled_response = self._handle_api_response(response)
-        self._handle_search_response(handled_response)
-        return [SearchResult(**ele).dict() for ele in handled_response]
+        try:
+            handled_response = self._retry_api_request(
+                "post", url, payload, max_retries
+            )
+            self._handle_search_response(handled_response)
+            return [SearchResult(**ele).dict() for ele in handled_response]
+
+        except Exception as e:
+            logger.error(f"Search request failed: {e}")
+            return {"error": str(e)}
 
     def get_search_rag_response(
         self,
@@ -184,18 +228,22 @@ class SciPhi:
             "temperature": temperature,
             "top_p": top_p,
         }
+        try:
+            response = self._retry_api_request("post", url, payload)
+            handled_response = self._handle_api_response(response)
 
-        response = self.client.post(url, json=payload)
-        handled_response = self._handle_api_response(response)
+            # rename the other queries to `related_queries` until LLM output is re-factored.
+            handled_response["related_queries"] = handled_response.pop(
+                "other_queries"
+            )
 
-        # rename the other queries to `related_queries` until LLM output is re-factored.
-        handled_response["related_queries"] = handled_response.pop(
-            "other_queries"
-        )
+            self._handle_search_response(handled_response["search_results"])
+            # Use Pydantic model for parsing and validation
+            search_response = SearchRAGResponse(**handled_response)
+        except Exception as e:
+            logger.error(f"Search request failed: {e}")
+            return {"error": str(e)}
 
-        self._handle_search_response(handled_response["search_results"])
-        # Use Pydantic model for parsing and validation
-        search_response = SearchRAGResponse(**handled_response)
         return search_response.dict()
 
     def completion(
@@ -255,9 +303,10 @@ class SciPhi:
             completion["related_queries"] = completion.pop("other_queries")
 
             return completion
-        
+
         except Exception as e:
-            return {'error': e}
+            logger.error(f"Completion generation failed: {e}")
+            return {"error": str(e)}
 
     def close(self) -> None:
         """

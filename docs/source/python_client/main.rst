@@ -96,6 +96,14 @@ Model Classes
     .. attribute:: score
 
         The score of the search result.
+    
+    .. attribute:: title
+
+        The title of the search result.
+
+    .. attribute:: text
+
+        The raw text of the search result.
 
     .. attribute:: url
 
@@ -136,7 +144,7 @@ Example usage:
    client = SciPhi(api_key="your_api_key")
 
    # Perform a search
-   search_results = client.search("quantum computing", "wikipedia")
+   search_results = client.search("quantum computing", "agent-search")
 
    # Retrieve a search RAG response
    rag_response = client.get_search_rag_response("natural language processing", "bing")

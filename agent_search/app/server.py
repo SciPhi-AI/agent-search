@@ -20,19 +20,6 @@ except ImportError as e:
 logger = logging.getLogger(__name__)
 
 
-def timed_fn(fn):
-    """A decorator to time a function"""
-
-    def wrapper(*args, **kwargs):
-        t0 = time.time()
-        result = fn(*args, **kwargs)
-        t1 = time.time()
-        logger.debug(f"Time taken for {fn.__name__}: {t1 - t0}")
-        return result
-
-    return wrapper
-
-
 class SearchServer:
     def __init__(self):
         self.client = WebSearchEngine()
@@ -47,14 +34,11 @@ class SearchServer:
         url_contains_filter=None,
     ):
         """Run a search query using the WebSearchEngine client"""
-        logger.debug(f"Step 0: Querying {query}")
 
         query_vector = self.client.get_query_vector(query)
-        broad_results = timed_fn(self.client.similarity_search)(
+
+        broad_results = self.client.similarity_search(
             query_vector=query_vector, limit=limit_broad_results
-        )
-        logger.debug(
-            f"Step 0: Broad similarity search, {len(broad_results)} results for query {query}."
         )
 
         if not url_contains_filter:
@@ -66,34 +50,17 @@ class SearchServer:
             url_contains=url_contains_filter,
         )
 
-        logger.debug(
-            f"Step 1: Unique URL Filtration, {len(deduped_url_results)} results for query {query}."
-        )
-
-        hierarchical_url_results = timed_fn(
-            self.client.hierarchical_similarity_reranking
-        )(
-            query_vector=query_vector,
-            urls=deduped_url_results,
-            limit=limit_hierarchical_url_results,
-        )
-
-        logger.debug(
-            f"Step 2: Reranking using hierarchical similarity search, {len(hierarchical_url_results)} results returned for query {query}."
-        )
-
-        try:
-            pagerank_reranked_results = timed_fn(
-                self.client.pagerank_reranking
-            )(hierarchical_url_results)[:limit_final_pagerank_results]
-            logger.debug(
-                f"Step 3: Reranking using pagerank, {len(pagerank_reranked_results)} results returned for query {query}."
+        hierarchical_url_results = (
+            self.client.hierarchical_similarity_reranking(
+                query_vector=query_vector,
+                urls=deduped_url_results,
+                limit=limit_hierarchical_url_results,
             )
+        )
 
-        except Exception as e:
-            logger.error(
-                f"An error occurred while reranking using pagerank: {e}"
-            )
+        pagerank_reranked_results = self.client.pagerank_reranking(
+            hierarchical_url_results
+        )[:limit_final_pagerank_results]
 
         return pagerank_reranked_results
 
@@ -146,8 +113,10 @@ def run_search(query: SearchQuery):
         )
         return {"results": results}
     except ValueError as e:
+        logger.error(f"ValueError {e} = ", e)
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Exception {e} = ", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 

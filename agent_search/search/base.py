@@ -105,16 +105,21 @@ class WebSearchEngine:
             limit=limit,
         )
 
-        return [
-            AgentSearchResult(
-                score=point.score,
-                text=point.payload["text"],
-                title=None,
-                url=point.payload["url"],
-                metadata={},
-            )
-            for point in points
-        ]
+        results = []
+        for point in points:
+            try:
+                results.append(
+                    AgentSearchResult(
+                        score=point.score,
+                        text=point.payload["text"],
+                        title=None,
+                        url=point.payload["url"],
+                        metadata={},
+                    )
+                )
+            except Exception as e:
+                logger.error(f"Error appending point {point} with {e}")
+        return results
 
     # Example of batch processing
     def execute_batch_query(self, urls, batch_size=20):
