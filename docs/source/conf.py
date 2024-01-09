@@ -27,8 +27,9 @@ def white_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     node = nodes.inline(rawtext, text, classes=["white"])
     return [node], []
 
+
 def setup(app):
-    roles.register_local_role('white', white_role)
+    roles.register_local_role("white", white_role)
 
 
 # -- General configuration ---------------------------------------------------
