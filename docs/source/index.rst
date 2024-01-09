@@ -18,7 +18,7 @@ Welcome to AgentSearch [ΨΦ]
    <a class="github-button" href="https://github.com/SciPhi-AI/agent-search/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork">Fork</a>
    </p>
 
-This framework facilitates seamless integration with the AgentSearch dataset or hosted search APIs (e.g., Search Engines) and with RAG-specialized LLMs (e.g., Search Agents).
+This framework facilitates seamless integration with the AgentSearch dataset or hosted search APIs (`e.g. Search Engines`) and with RAG-specialized LLM's (`e.g. Search Agents`).
 
 Features of AgentSearch
 -----------------------
@@ -29,9 +29,6 @@ Features of AgentSearch
 
 Quickstart Guide for AgentSearch
 --------------------------------
-
-Quick Setup
-+++++++++++
 
 1. Install the AgentSearch client:
 
@@ -58,8 +55,7 @@ Quick Setup
       # Generate a RAG response
       rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
       print(rag_response)
-      # { 'response': '...', 'other_queries': '...', 'search_results': '...' }
-
+      # {'response': "The latest news encompasses ... and its consequences [2].", 'related_queries': ['Details on the...', ...], 'search_results' : [...]}
 
 Local Setup and Initialization
 -------------------------------
