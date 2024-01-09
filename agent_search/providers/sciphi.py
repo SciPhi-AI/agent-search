@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 class SearchResult(BaseModel):
     score: Optional[float] = None
     url: str
+    title: str
+    text: str
+    dataset: str
     metadata: Any
 
 
