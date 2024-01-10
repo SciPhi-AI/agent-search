@@ -94,5 +94,3 @@ AgentSearch is a multi-TB dataset hosted on [here on HuggingFace](https://huggin
 - User Guide coming soon!
 
 ---
-
-This revised README includes keywords such as "RAG-specialized LLM," "search engine integration," "Sensei-7B," "API connectivity," and "search agent integration" strategically placed in the title, subtitles, and throughout the content. It also maintains a clear and informative structure, which is essential for user engagement.
