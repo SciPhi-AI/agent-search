@@ -106,9 +106,10 @@ The SciPhi API Client is designed to simplify interaction with the SciPhi API. I
 Example usage:
 
 .. code-block:: python
+
    # pip install agent-search
-   
-   from sciphi import SciPhi
+
+   from agent_search import SciPhi
 
    # Initialize the client
    client = SciPhi(api_key="your_api_key") # Note - do not store plaintext API key in prod
