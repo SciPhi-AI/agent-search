@@ -106,7 +106,8 @@ The SciPhi API Client is designed to simplify interaction with the SciPhi API. I
 Example usage:
 
 .. code-block:: python
-
+   # pip install agent-search
+   
    from sciphi import SciPhi
 
    # Initialize the client
@@ -119,7 +120,7 @@ Example usage:
    rag_response = client.get_search_rag_response("natural language processing", "bing")
 
    # Generate a completion
-   completion = client.completion("Explain the Turing Test", llm_model_name="SciPhi/Sensei-7B-V1)
+   completion = client.completion("Explain the Turing Test", llm_model_name="SciPhi/Sensei-7B-V1")
 
    # Close the client
    client.close()
