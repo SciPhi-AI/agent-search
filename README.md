@@ -1,4 +1,4 @@
-# AgentSearch: A ramework for powering search agents and enabling customizable local search.
+# AgentSearch: A framework for powering search agents and enabling customizable local search.
 
 ![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/8d0424e6-84e3-42f6-9893-3d63f9b2a58d)
 
@@ -63,6 +63,8 @@ print(search_response)
 
 AgentSearch is a multi-TB dataset curated by SciPhi and accessible [on HuggingFace](https://huggingface.co/datasets/SciPhi/AgentSearch-V1). This repository has the necessary code for individuals to download and host their own search engine with this dataset.
 
+> **Warning:** This setup documentation is preliminary and not yet finalized. Please note that the setup process may change in the future.
+
 ### Prerequisites
 
 - Docker: [Download here](#)
@@ -76,11 +78,13 @@ AgentSearch is a multi-TB dataset curated by SciPhi and accessible [on HuggingFa
    ```
 2. **Populate Database**
    ```bash
-   python -m agent_search.scripts.populate_postgres_from_hf run
+   # Needs revision. 
+   # python -m agent_search.scripts.populate_postgres_from_hf run
    ```
 3. **Qdrant Service with Docker**
    ```bash
-   docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+   # Needs revision. 
+   # docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
    ```
 4. **Populate Vector Database**
    ```bash
