@@ -19,14 +19,14 @@ Welcome to AgentSearch [ΨΦ]
    </p>
 
 
-AgentSearch is a framework designed to power search agents through the seamless integration of LLM agents with various search engines. These search agents are capable of performing a range of functions, such as summarizing search results, generating new queries, and retrieving downstream results.
+AgentSearch is a framework for powering search agents by seamlessly integrating LLM technologies from various providers with different search engines. This integration enables search agents to perform a wide range of functions through Retrieval-Augmented Generation (RAG), including summarizing search results, generating new queries, and retrieving detailed downstream results.
 
 Features of AgentSearch
 -----------------------
 
 - **Search Agent Integration**: Effortlessly build a search agent by connecting any search-specialized LLM, such as `Sensei-7B <https://huggingface.co/SciPhi/Sensei-7B-V1>`_, with a supported search engine.
-- **Customizable Search**: Leverage the AgentSearch dataset alongside this code to deploy a customizable local search engine.
-- **API Endpoint Integration**: Seamlessly integrate with a variety of hosted provider APIs for diverse search solutions, including Bing, SERP API, and AgentSearch. Additionally, support is provided for LLMs from SciPhi, HuggingFace, OpenAI, Anthropic, and more.
+- **Customizable Search**: Utilize the AgentSearch dataset in conjunction with this framework to deploy a customizable local search engine.
+- **API Endpoint Integration**: Seamlessly integrate with a variety of hosted provider APIs for diverse search solutions, offering ease of use and flexibility, including Bing, SERP API, and AgentSearch. Additionally, support is provided for LLMs from SciPhi, HuggingFace, OpenAI, Anthropic, and more.
 
 Quickstart Guide for AgentSearch
 --------------------------------
