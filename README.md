@@ -30,22 +30,30 @@ export SCIPHI_API_KEY=$MY_SCIPHI_API_KEY
 
 ### Usage
 
-Import and use the AgentSearch client in your project:
+Code your own search agent workflow:
+
 
 ```python
 from agent_search import SciPhi
 
 client = SciPhi()
 
+# Search, then summarize result and generate related queries
+agent_summary = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+print(agent_summary)
+# { 'response': '...', 'other_queries': '...', 'search_results': '...' }
+```
+
+Code your own search agent workflow:
+
+```python
+
+...
+
 # Perform a search
 search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
 print(search_response)
 # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }]
-
-# Generate a RAG response
-rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
-print(rag_response)
-# { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 ```
 
 ## Community & Support
