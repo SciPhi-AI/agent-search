@@ -1,8 +1,6 @@
----
-
 AgentSearch: A framework for powering search agents and customizable local search.
 
-![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/56268e41-130f-4d2f-ba22-b565f7642713)
+![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/8d0424e6-84e3-42f6-9893-3d63f9b2a58d)
 
 # AgentSearch
 
@@ -92,5 +90,3 @@ AgentSearch is a multi-TB dataset hosted on [here on HuggingFace](https://huggin
 - Execute commands from the root directory of the AgentSearch project.
 - Replace `query` in the run command with your specific search query.
 - User Guide coming soon!
-
----
