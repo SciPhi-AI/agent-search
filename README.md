@@ -1,8 +1,6 @@
-AgentSearch: A framework for powering search agents and customizable local search.
+# AgentSearch: A ramework for powering search agents and enabling customizable local search.
 
 ![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/8d0424e6-84e3-42f6-9893-3d63f9b2a58d)
-
-# AgentSearch
 
 AgentSearch is a framework for powering search agents by seamlessly integrating LLM technologies from various providers with different search engines. This integration enables search agents to perform a wide range of functions through Retrieval-Augmented Generation (RAG), including summarizing search results, generating new queries, and retrieving detailed downstream results.
 
