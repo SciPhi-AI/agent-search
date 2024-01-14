@@ -1,18 +1,18 @@
 ---
 
-# AgentSearch: Advanced RAG-specialized LLM & Search Engine Integration Framework
+AgentSearch: A framework for powering search agents and customizable local search.
 
 ![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/56268e41-130f-4d2f-ba22-b565f7642713)
 
-## Overview
+# AgentSearch
 
-AgentSearch is a groundbreaking framework designed for efficient and seamless integration with the AgentSearch dataset and various hosted search APIs, including popular search engines. It specializes in working with RAG (Retrieval-Augmented Generation) specialized Language Learning Models (LLMs) like Sensei-7B, enhancing the capabilities of search agents in diverse applications.
+AgentSearch is a framework for powering search agents by seamlessly integrating LLM technologies from various providers with different search engines. This integration enables search agents to perform a wide range of functions, including summarizing search results, generating new queries, and retrieving detailed downstream results.
 
-### Key Features
+## Features of AgentSearch
 
-- **Search Agent Integration:** Effortlessly connect with any RAG-specialized LLM, including the cutting-edge Sensei-7B model.
-- **Customizable Search Solutions:** Utilize the AgentSearch dataset for deploying your local search engine or incorporate custom datasets for tailored search functionalities.
-- **API Connectivity:** Easily integrate with leading search provider APIs such as SciPhi for streamlined deployment.
+- **Search Agent Integration**: Effortlessly build a search agent by connecting any search-specialized LLM, such as [Sensei-7B](https://huggingface.co/SciPhi/Sensei-7B-V1), with a supported search engine.
+- **Customizable Search**: Utilize the AgentSearch dataset in conjunction with this framework to deploy a customizable local search engine.
+- **API Endpoint Integration**: Seamlessly integrate with a variety of hosted provider APIs for diverse search solutions, including Bing, SERP API, and AgentSearch. Additionally, the framework supports LLMs from providers like SciPhi, vLLM, HuggingFace, OpenAI, and Anthropic.
 
 ## Quickstart Guide
 

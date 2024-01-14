@@ -18,14 +18,15 @@ Welcome to AgentSearch [ΨΦ]
    <a class="github-button" href="https://github.com/SciPhi-AI/agent-search/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork">Fork</a>
    </p>
 
-This framework facilitates seamless integration with the AgentSearch dataset or hosted search APIs (`e.g. Search Engines`) and with RAG-specialized LLM's (`e.g. Search Agents`).
+
+AgentSearch is a framework designed to power search agents through the seamless integration of LLM agents with various search engines. These search agents are capable of performing a range of functions, such as summarizing search results, generating new queries, and retrieving downstream results.
 
 Features of AgentSearch
 -----------------------
 
-- **Search Agent**: Seamless integration with any RAG-specialized LLM, such as `Sensei-7B <https://huggingface.co/SciPhi/Sensei-7B-V1>`_.
-- **Customizable Search**: Deploy your own local search engine with the `AgentSearch dataset <https://huggingface.co/datasets/SciPhi/AgentSearch-V1>`_. Or, introduce your own custom datasets to meet your specific needs.
-- **API Endpoint**: Connect with SciPhi and other search provider APIs for easy deployment.
+- **Search Agent Integration**: Effortlessly build a search agent by connecting any search-specialized LLM, such as `Sensei-7B <https://huggingface.co/SciPhi/Sensei-7B-V1>`_, with a supported search engine.
+- **Customizable Search**: Leverage the AgentSearch dataset alongside this code to deploy a customizable local search engine.
+- **API Endpoint Integration**: Seamlessly integrate with a variety of hosted provider APIs for diverse search solutions, including Bing, SERP API, and AgentSearch. Additionally, support is provided for LLMs from SciPhi, HuggingFace, OpenAI, Anthropic, and more.
 
 Quickstart Guide for AgentSearch
 --------------------------------
@@ -40,22 +41,30 @@ Quickstart Guide for AgentSearch
 
    `SciPhi API Key Signup <https://www.sciphi.ai/signup>`_
 
-3. Code your own search &/or RAG workflow:
+3. Code your own search agent workflow:
 
    .. code-block:: python
 
       # Requires SCIPHI_API_KEY in the environment
       from agent_search import SciPhi
 
+      client = SciPhi()
+
+      # Generate a search summary and related queries
+      agent_summary = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+      print(agent_summary)
+      # {'response': "The latest news encompasses ... and its consequences [2].", 'related_queries': ['Details on the...', ...], 'search_results' : [...]}
+
+4. Standalone searches from the AgentSearch search engine are supported:
+
+   .. code-block:: python
+      
+      ...
+
       # Perform a search
       search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
       print(search_response)
       # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
-
-      # Generate a RAG response
-      rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
-      print(rag_response)
-      # {'response': "The latest news encompasses ... and its consequences [2].", 'related_queries': ['Details on the...', ...], 'search_results' : [...]}
 
 Local Setup and Initialization
 -------------------------------
