@@ -61,7 +61,7 @@ print(search_response)
 
 ## Self-Hosting Guide
 
-AgentSearch is a multi-TB dataset hosted on [here on HuggingFace](https://huggingface.co/datasets/SciPhi/AgentSearch-V1). This repository has the necessary code for individuals to download and host their own search engine with this dataset.
+AgentSearch is a multi-TB dataset curated by SciPhi and accessible [on HuggingFace](https://huggingface.co/datasets/SciPhi/AgentSearch-V1). This repository has the necessary code for individuals to download and host their own search engine with this dataset.
 
 ### Prerequisites
 
