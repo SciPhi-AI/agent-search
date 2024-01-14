@@ -6,6 +6,79 @@ Introduction
 
 The SciPhi API Client is a Python library for interacting with the SciPhi API. It provides methods for performing searches, retrieving search RAG responses, generating completions, and managing client sessions.
 
+
+Use and Examples
+----------------
+
+The SciPhi API Client is designed to simplify interaction with the SciPhi API. It abstracts the complexities of HTTP requests and response handling, providing a convenient interface for Python developers.
+
+
+Call a pre-configured search agent endpoint:
+
+   .. code-block:: python
+
+      # Requires SCIPHI_API_KEY in the environment
+      from agent_search import SciPhi
+
+      client = SciPhi()
+
+      # Search, then summarize result and generate related queries
+      agent_summary = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+      print(agent_summary)
+      # {'response': "The latest news encompasses ... and its consequences [2].", 'related_queries': ['Details on the...', ...], 'search_results' : [...]}
+
+Standalone searches and from the AgentSearch search engine are supported:
+
+   .. code-block:: python
+      
+      from agent_search import SciPhi
+
+      client = SciPhi()
+
+      # Perform a search
+      search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
+
+      print(search_response)
+      # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
+
+Code your own custom search agent workflow:
+
+   .. code-block:: python
+      
+      from agent_search import SciPhi
+      import json
+
+      client = SciPhi()
+
+      # Specify instructions for the task
+      instruction = "Your task is to perform retrieval augmented generation (RAG) over the given query and search results. Return your answer in a json format that includes a summary of the search results and a list of related queries."
+      query = "What is Fermat's Last Theorem?"
+
+      # construct search context
+      search_response = client.search(query=query, search_provider='agent-search')
+      search_context = "\n\n".join(
+          f"{idx + 1}. Title: {item['title']}\nURL: {item['url']}\nText: {item['text']}"
+          for idx, item in enumerate(search_response)
+      ).encode('utf-8')
+    
+      # Prefix to enforce a JSON response 
+      json_response_prefix = '{"summary":'
+      
+      # Prepare a prompt
+      formatted_prompt = f"### Instruction:{instruction}\n\nQuery:\n{query}\n\nSearch Results:\n${search_context}\n\nQuery:\n{query}\n### Response:\n{json_response_prefix}",
+
+      # Generate a raw string completion with Sensei-7B-V1
+      completion = json_response_prefix + client.completion(formatted_prompt, llm_model_name="SciPhi/Sensei-7B-V1")
+
+      print(json.loads(completion))
+      # {
+      #   "summary":  "\nFermat's Last Theorem is a mathematical proposition first prop ... ",
+      #   "other_queries": ["The role of elliptic curves in the proof of Fermat's Last Theorem", ...]
+      # }
+
+
+
+By encapsulating the details of the API calls, the SciPhi API Client offers a user-friendly way to leverage the advanced search and AI capabilities of the SciPhi platform.
 Classes and Methods
 -------------------
 
@@ -36,7 +109,7 @@ Classes and Methods
         :param llm_model: str: The language model to use.
         :param temperature: int: The temperature setting for the query.
         :param top_p: int: The top-p setting for the query.
-        :return: Dict: A dictionary which corresponds with `SearchRAGResponse`, specified below.
+        :return: str: A string containing the completed text.
 
     .. method:: completion(self, prompt: str, llm_model_name: str = "SciPhi/Sensei-7B-V1", llm_max_tokens_to_sample: int = 1_024, llm_temperature: float = 0.2, llm_top_p: float = 0.90) -> str
 
@@ -97,33 +170,3 @@ Model Classes
     .. attribute:: search_results
 
         A list of SearchResult objects.
-
-Use and Examples
-----------------
-
-The SciPhi API Client is designed to simplify interaction with the SciPhi API. It abstracts the complexities of HTTP requests and response handling, providing a convenient interface for Python developers.
-
-Example usage:
-
-.. code-block:: python
-
-   # pip install agent-search
-
-   from agent_search import SciPhi
-
-   # Initialize the client
-   client = SciPhi(api_key="your_api_key") # Note - do not store plaintext API key in prod
-
-   # Perform a search
-   search_results = client.search("quantum computing", "agent-search")
-
-   # Retrieve a search RAG response
-   rag_response = client.get_search_rag_response("natural language processing", "bing")
-
-   # Generate a completion
-   completion = client.completion("Explain the Turing Test", llm_model_name="SciPhi/Sensei-7B-V1")
-
-   # Close the client
-   client.close()
-
-By encapsulating the details of the API calls, the SciPhi API Client offers a user-friendly way to leverage the advanced search and AI capabilities of the SciPhi platform.
