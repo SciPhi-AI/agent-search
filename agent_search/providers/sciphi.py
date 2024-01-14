@@ -281,25 +281,21 @@ class SciPhi:
         from synthesizer.interface import LLMInterfaceManager
         from synthesizer.llm import GenerationConfig
 
-        llm_interface = LLMInterfaceManager.get_interface_from_args(
-            LLMProviderName("sciphi"),
-        )
-
-        generation_config = GenerationConfig(
-            model_name=llm_model_name,
-            max_tokens_to_sample=llm_max_tokens_to_sample,
-            temperature=llm_temperature,
-            top_p=llm_top_p,
-        )
-
-        completion = '{"response":' + llm_interface.get_completion(
-            prompt, generation_config
-        ).replace("</s>", "")
         try:
-            completion = json.loads(completion)
+            llm_interface = LLMInterfaceManager.get_interface_from_args(
+                LLMProviderName("sciphi"),
+            )
 
-            # rename the other queries to `related_queries` until LLM output is re-factored.
-            completion["related_queries"] = completion.pop("other_queries")
+            generation_config = GenerationConfig(
+                model_name=llm_model_name,
+                max_tokens_to_sample=llm_max_tokens_to_sample,
+                temperature=llm_temperature,
+                top_p=llm_top_p,
+            )
+
+            completion = llm_interface.get_completion(
+                prompt, generation_config
+            ).replace("</s>", "")
 
             return completion
 

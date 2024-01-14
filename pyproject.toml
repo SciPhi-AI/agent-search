@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "agent_search"
-version = "0.0.8"
+version = "0.1.0"
 description = "AgentSearch: An open source framework and dataset for webscale local search."
 authors = ["Owen Colegrove <owen@sciphi.ai>"]
 license = "Apache-2.0"
@@ -23,6 +23,7 @@ qdrant_client = "^1.7.0"
 requests = "^2.31.0"
 sciphi_synthesizer="1.0.5"
 transformers = "^4.33.1"
+openai = "0.27.8"
 
 # Additional Requirements
 # torch, fastapi, uvicorn, psycogp2
