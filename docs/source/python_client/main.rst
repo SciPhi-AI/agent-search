@@ -12,6 +12,7 @@ Use and Examples
 
 The SciPhi API Client is designed to simplify interaction with the SciPhi API. It abstracts the complexities of HTTP requests and response handling, providing a convenient interface for Python developers.
 
+
 Call a pre-configured search agent endpoint:
 
    .. code-block:: python

@@ -41,7 +41,6 @@ Quickstart Guide for AgentSearch
 
    `SciPhi API Key Signup <https://www.sciphi.ai/signup>`_
 
-
 3. Call a pre-configured search agent endpoint:
 
    .. code-block:: python

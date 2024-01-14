@@ -31,6 +31,7 @@ export SCIPHI_API_KEY=$MY_SCIPHI_API_KEY
 Call a pre-configured search agent endpoint:
 
 ```python
+# Requires SCIPHI_API_KEY in the environment
 from agent_search import SciPhi
 
 client = SciPhi()
@@ -44,7 +45,7 @@ print(agent_summary)
 Standalone searches and from the AgentSearch search engine are supported:
 
 ```python
-
+# Requires SCIPHI_API_KEY in the environment
 from agent_search import SciPhi
 
 client = SciPhi()
@@ -57,8 +58,9 @@ print(search_response)
 ```
 
 Code your own custom search agent workflow:
-```python
 
+```python
+# Requires SCIPHI_API_KEY in the environment
 from agent_search import SciPhi
 
 client = SciPhi()
@@ -74,7 +76,7 @@ search_context = "\n\n".join(
       for idx, item in enumerate(search_response)
 ).encode('utf-8')
 
-# hack to get a JSON response (we are working to improve this)
+# Prefix to enforce a JSON response 
 json_response_prefix = '{"summary":'
 
 # Prepare a prompt
@@ -98,5 +100,4 @@ print(completion)
 ### Additional Notes
 
 - Execute commands from the root directory of the AgentSearch project.
-- Replace `query` in the run command with your specific search query.
 - User Guide coming soon!
