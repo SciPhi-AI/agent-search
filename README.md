@@ -28,8 +28,7 @@ export SCIPHI_API_KEY=$MY_SCIPHI_API_KEY
 
 ### Usage
 
-Code your own search agent workflow:
-
+Call a pre-configured search agent endpoint:
 
 ```python
 from agent_search import SciPhi
@@ -57,7 +56,7 @@ print(search_response)
 # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }]
 ```
 
-Get a raw completion from the SciPhi API endpoint:
+Code your own custom search agent workflow:
 ```python
 
 from agent_search import SciPhi
@@ -93,44 +92,8 @@ print(completion)
 
 ## Community & Support
 
-- **Engage with Us:** Join our [Discord community](#) for discussions and updates.
+- **Engage with Us:** Join our [Discord community](https://discord.gg/mN4kWbsgRu) for discussions and updates.
 - **Feedback & Inquiries:** Contact us via email for personalized support.
-
-## Self-Hosting Guide
-
-AgentSearch is a multi-TB dataset curated by SciPhi and accessible [on HuggingFace](https://huggingface.co/datasets/SciPhi/AgentSearch-V1). This repository has the necessary code for individuals to download and host their own search engine with this dataset.
-
-> **Warning:** This setup documentation is preliminary and not yet finalized. Please note that the setup process may change in the future.
-
-### Prerequisites
-
-- Docker: [Download here](#)
-- Postgres: [Download here](#)
-
-### Setup Steps
-
-1. **Start Postgres Database**
-   ```bash
-   sudo service postgresql start
-   ```
-2. **Populate Database**
-   ```bash
-   # Needs revision. 
-   # python -m agent_search.scripts.populate_postgres_from_hf run
-   ```
-3. **Qdrant Service with Docker**
-   ```bash
-   # Needs revision. 
-   # docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
-   ```
-4. **Populate Vector Database**
-   ```bash
-   python -m agent_search.scripts.populate_qdrant_from_postgres run --delete_existing=True
-   ```
-5. **Launch Server**
-   ```bash
-   python -m agent_search.app.server
-   ```
 
 ### Additional Notes
 

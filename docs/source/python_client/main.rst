@@ -12,7 +12,7 @@ Use and Examples
 
 The SciPhi API Client is designed to simplify interaction with the SciPhi API. It abstracts the complexities of HTTP requests and response handling, providing a convenient interface for Python developers.
 
-Code your own search agent workflow:
+Call a pre-configured search agent endpoint:
 
    .. code-block:: python
 
@@ -36,15 +36,16 @@ Standalone searches and from the AgentSearch search engine are supported:
 
       # Perform a search
       search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
-      
+
       print(search_response)
       # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
 
-Get a raw completion from the SciPhi API endpoint:
+Code your own custom search agent workflow:
 
    .. code-block:: python
       
       from agent_search import SciPhi
+      import json
 
       client = SciPhi()
 
@@ -59,16 +60,16 @@ Get a raw completion from the SciPhi API endpoint:
           for idx, item in enumerate(search_response)
       ).encode('utf-8')
     
-      # hack to get a JSON response (we are working to improve this)
+      # Prefix to enforce a JSON response 
       json_response_prefix = '{"summary":'
       
       # Prepare a prompt
       formatted_prompt = f"### Instruction:{instruction}\n\nQuery:\n{query}\n\nSearch Results:\n${search_context}\n\nQuery:\n{query}\n### Response:\n{json_response_prefix}",
 
-      # Generate a completion with Sensei-7B-V1
+      # Generate a raw string completion with Sensei-7B-V1
       completion = json_response_prefix + client.completion(formatted_prompt, llm_model_name="SciPhi/Sensei-7B-V1")
 
-      print(completion)
+      print(json.loads(completion))
       # {
       #   "summary":  "\nFermat's Last Theorem is a mathematical proposition first prop ... ",
       #   "other_queries": ["The role of elliptic curves in the proof of Fermat's Last Theorem", ...]

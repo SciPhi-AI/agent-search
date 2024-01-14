@@ -41,7 +41,8 @@ Quickstart Guide for AgentSearch
 
    `SciPhi API Key Signup <https://www.sciphi.ai/signup>`_
 
-3. Code your own search agent workflow:
+
+3. Call a pre-configured search agent endpoint:
 
    .. code-block:: python
 
@@ -55,67 +56,60 @@ Quickstart Guide for AgentSearch
       print(agent_summary)
       # {'response': "The latest news encompasses ... and its consequences [2].", 'related_queries': ['Details on the...', ...], 'search_results' : [...]}
 
-4. Standalone searches from the AgentSearch search engine are supported:
+4. Standalone searches and from the AgentSearch search engine are supported:
 
    .. code-block:: python
       
-      ...
+      from agent_search import SciPhi
+
+      client = SciPhi()
 
       # Perform a search
       search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
+
       print(search_response)
       # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }
 
-Local Setup and Initialization
--------------------------------
-Interested in standing up an instance of the open source search dataset that pairs with AgentSearch locally? Then follow the guide below.
+5. Code your own custom search agent workflow:
 
-.. warning::
-   This setup documentation is preliminary and not yet finalized. Please note that the setup process may change in the future.
+   .. code-block:: python
+      
+      from agent_search import SciPhi
+      import json
 
-Prerequisites
-+++++++++++++
+      client = SciPhi()
 
-Ensure Docker and Postgres are installed:
+      # Specify instructions for the task
+      instruction = "Your task is to perform retrieval augmented generation (RAG) over the given query and search results. Return your answer in a json format that includes a summary of the search results and a list of related queries."
+      query = "What is Fermat's Last Theorem?"
 
-- Docker: `Download from Docker's official website <https://www.docker.com/>`.
-- Postgres: `Download from PostgreSQL's official website <https://www.postgresql.org/download/>`.
+      # construct search context
+      search_response = client.search(query=query, search_provider='agent-search')
+      search_context = "\n\n".join(
+          f"{idx + 1}. Title: {item['title']}\nURL: {item['url']}\nText: {item['text']}"
+          for idx, item in enumerate(search_response)
+      ).encode('utf-8')
+    
+      # Prefix to enforce a JSON response 
+      json_response_prefix = '{"summary":'
+      
+      # Prepare a prompt
+      formatted_prompt = f"### Instruction:{instruction}\n\nQuery:\n{query}\n\nSearch Results:\n${search_context}\n\nQuery:\n{query}\n### Response:\n{json_response_prefix}",
 
-1. **Launch Postgres Database**:
+      # Generate a raw string completion with Sensei-7B-V1
+      completion = json_response_prefix + client.completion(formatted_prompt, llm_model_name="SciPhi/Sensei-7B-V1")
 
-   .. code-block:: shell
-
-      sudo service postgresql start
-
-2. **Populate Relational Database (Postgres)**:
-
-   .. code-block:: shell
-
-      python -m agent_search.scripts.populate_postgres_from_hf run
-
-3. **Start Qdrant Service with Docker**:
-
-   .. code-block:: shell
-
-      docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
-
-4. **Populate Vector Database (Qdrant)**:
-
-   .. code-block:: shell
-
-      python -m agent_search.scripts.populate_qdrant_from_postgres run --delete_existing=True
-
-5. **Run the Server**:
-
-   .. code-block:: shell
-
-      python -m agent_search.app.server
-
+      print(json.loads(completion))
+      # {
+      #   "summary":  "\nFermat's Last Theorem is a mathematical proposition first prop ... ",
+      #   "other_queries": ["The role of elliptic curves in the proof of Fermat's Last Theorem", ...]
+      # }
 
 Additional Notes
 ----------------
 
 - Ensure all installation commands are executed from the root directory of the AgentSearch project.
+- For support, join the `Discord community <https://discord.gg/mN4kWbsgRu>`
 
 Documentation
 -------------
