@@ -50,7 +50,7 @@ Quickstart Guide for AgentSearch
 
       client = SciPhi()
 
-      # Generate a search summary and related queries
+      # Search, then summarize result and generate related queries
       agent_summary = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
       print(agent_summary)
       # {'response': "The latest news encompasses ... and its consequences [2].", 'related_queries': ['Details on the...', ...], 'search_results' : [...]}

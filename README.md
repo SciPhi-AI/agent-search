@@ -1,8 +1,6 @@
-AgentSearch: A framework for powering search agents and customizable local search.
+# AgentSearch: A framework for powering search agents and enabling customizable local search.
 
 ![AgentSearch Banner](https://github.com/SciPhi-AI/agent-search/assets/68796651/8d0424e6-84e3-42f6-9893-3d63f9b2a58d)
-
-# AgentSearch
 
 AgentSearch is a framework for powering search agents by seamlessly integrating LLM technologies from various providers with different search engines. This integration enables search agents to perform a wide range of functions through Retrieval-Augmented Generation (RAG), including summarizing search results, generating new queries, and retrieving detailed downstream results.
 
@@ -30,22 +28,30 @@ export SCIPHI_API_KEY=$MY_SCIPHI_API_KEY
 
 ### Usage
 
-Import and use the AgentSearch client in your project:
+Code your own search agent workflow:
+
 
 ```python
 from agent_search import SciPhi
 
 client = SciPhi()
 
+# Search, then summarize result and generate related queries
+agent_summary = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
+print(agent_summary)
+# { 'response': '...', 'other_queries': '...', 'search_results': '...' }
+```
+
+Code your own search agent workflow:
+
+```python
+
+...
+
 # Perform a search
 search_response = client.search(query='Quantum Field Theory', search_provider='agent-search')
 print(search_response)
 # [{ 'score': '.89', 'url': 'https://...', 'metadata': {...} }]
-
-# Generate a RAG response
-rag_response = client.get_search_rag_response(query='latest news', search_provider='bing', llm_model='SciPhi/Sensei-7B-V1')
-print(rag_response)
-# { 'response': '...', 'other_queries': '...', 'search_results': '...' }
 ```
 
 ## Community & Support
@@ -55,7 +61,9 @@ print(rag_response)
 
 ## Self-Hosting Guide
 
-AgentSearch is a multi-TB dataset hosted on [here on HuggingFace](https://huggingface.co/datasets/SciPhi/AgentSearch-V1). This repository has the necessary code for individuals to download and host their own search engine with this dataset.
+AgentSearch is a multi-TB dataset curated by SciPhi and accessible [on HuggingFace](https://huggingface.co/datasets/SciPhi/AgentSearch-V1). This repository has the necessary code for individuals to download and host their own search engine with this dataset.
+
+> **Warning:** This setup documentation is preliminary and not yet finalized. Please note that the setup process may change in the future.
 
 ### Prerequisites
 
@@ -70,11 +78,13 @@ AgentSearch is a multi-TB dataset hosted on [here on HuggingFace](https://huggin
    ```
 2. **Populate Database**
    ```bash
-   python -m agent_search.scripts.populate_postgres_from_hf run
+   # Needs revision. 
+   # python -m agent_search.scripts.populate_postgres_from_hf run
    ```
 3. **Qdrant Service with Docker**
    ```bash
-   docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+   # Needs revision. 
+   # docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
    ```
 4. **Populate Vector Database**
    ```bash
